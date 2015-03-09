@@ -1,0 +1,165 @@
+﻿@using WebSQLMan.SQL;
+
+@{
+   
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var X = Html.X();
+    }
+<html>
+<head>
+
+    <title>WebSqlAdministrator</title>
+
+    <link type="text/css" rel="stylesheet" href="http://speed.ext.net/www/intro/css/main.css" />
+</head>
+<body>
+
+
+    @(Html.X().ResourceManager())
+    @(X.Viewport() // main page view create
+        .Layout(LayoutType.Border)
+        .Items(
+                    X.Toolbar()
+                    .ID("ToolBar")
+                    .Region(Region.North)
+                    .Layout(LayoutType.Auto)
+                    .StyleSpec("padding-bottom:0px")
+                    .Items(
+                    X.Button().ID("ConnectBtn").Icon(Icon.DatabaseConnect),
+                    X.Button().ID("RefreshBtn").Icon(Icon.DatabaseRefresh),
+                    X.Button().ID("RunBtn").Icon(Icon.ScriptStart),
+                    X.Button().ID("CreateNewBtn").Icon(Icon.New),
+                    X.ToolbarFill(),
+                    X.ToolbarSeparator(),
+                    X.Button().ID("ExitBtn").Icon(Icon.Disconnect)
+                    ),
+
+            X.Panel() //create Object browser
+                .Title("Object Explorer")
+                .Region(Region.West)
+                .Layout(LayoutType.Accordion)
+                .Width(225)
+                .MinWidth(225)
+                .MaxWidth(400)
+                .Split(true)
+                .Collapsible(true)
+                .Items(
+                    X.Panel()
+                        .Title("Connection")
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Icon(Icon.DatabaseConnect)
+                        .Html("Some Connections Here"),
+
+                     X.Panel()
+                        .Title("Databases")
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Icon(Icon.Database)
+                        .Html("Database Tree, created from sys.dba file"),
+
+                     X.Panel()
+                        .Title("Tools")
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Icon(Icon.Package)
+                        .Html("Managment tools Here"),
+
+                     X.Panel()
+                        .Title("Settings")
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Icon(Icon.FolderWrench)
+                        .Html("Some settings in here"),
+
+                     X.Panel()
+                        .Title("Help")
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Icon(Icon.Help)
+                        .Html("Some Help Here")
+
+                     ),
+
+            X.TabPanel() // create main view panel using grid
+                .Region(Region.Center)
+                .Items(
+                    X.Panel()
+                    .Title("Result")
+                    .ID("CenterResult")
+                    .Region(Region.Center)
+                    .BodyPadding(10)
+                    .Header(false)
+
+                        ,
+
+                    X.Panel()
+                        .Title("2Tab")
+                        .Closable(false)
+                        .Border(false)
+                        .BodyPadding(6)
+                        .Html("new Tab for result query")
+    ),
+
+    X.Panel() //create right panel with 2 tabs for error or succces messages
+    .Title("MessageBox")
+    .Region(Region.East)
+    .Collapsible(true)
+    .Split(true)
+    .MinWidth(225)
+    .Width(225)
+    .Layout(LayoutType.Fit)
+    .Items(
+    X.TabPanel()
+    .ActiveTabIndex(1)
+    .TabPosition(TabPosition.Bottom)
+    .Border(false)
+    .Items(
+    X.Panel()
+    .Title("Tab 1")
+    .Border(false)
+    .BodyPadding(6)
+    .Html("Now it's just panel, but will be somth like messagebox with error_messages or success"),
+
+    X.Panel()
+    .Title("Tab 2")
+    .Closable(true)
+    .Border(false)
+    .BodyPadding(6)
+    .Html(" Tab 2")
+    )
+    ),
+
+    X.Panel() //down panel for queries
+    .Title("new query")
+    .ID("SQLcommandTab")
+    .Region(Region.South)
+    .Split(true)
+    .Collapsible(true)
+    .Height(150)
+    .BodyPadding(6)
+    .Layout(LayoutType.Fit)
+                    
+                   .Items(
+            X.Button().Text("RunSQL")
+            .MaxWidth(100)
+            .MaxHeight(50)
+            .DirectEvents(de =>
+            {
+                de.Click.Url = Url.Action("Test");
+                de.Click.ExtraParams.Add(new { containerId = "CenterResult" }); // + query=SQLComm для рабочей версии
+            })
+            ,
+                    X.TextArea()
+                    .ID("SQLComm")
+                    .Text("Type ur query here")
+                    .Width(400)
+                  
+                    
+                                                
+                        
+                                            )
+                                            )
+    )
+</body>>
+</html>

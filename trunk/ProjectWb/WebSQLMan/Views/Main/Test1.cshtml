@@ -1,0 +1,19 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var X = Html.X();
+}
+
+<h2>Report</h2>
+
+
+    <h1>GridPanel for Model</h1>
+    <p>Automatically build a grid for a model</p>
+@(X.ResourceManager())
+@(
+ X.GridPanelFor(Model)
+                .Title(Model.TableName)
+                .Width(350)
+                .Height(200)
+                .ForceFit(true)
+)
