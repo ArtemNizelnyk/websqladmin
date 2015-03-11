@@ -24,7 +24,7 @@ namespace WebSQLMan.SQL
             return servers;
         }
 
-        public static SqlConnection ConnectToSQLserver( string Server, bool IntegratedSecurity = true) 
+        public static SqlConnection ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
         {
             SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
             connection.DataSource = Server;
@@ -69,62 +69,77 @@ namespace WebSQLMan.SQL
         {
             List<string> Tables = new List<string>();
 
-            string queryString = String.Format("Use {0} SELECT Name FROM dbo.sysobjects WHERE (xtype = 'U');", DataBase);  
-                SqlCommand command = new SqlCommand(
-                    queryString, cn);
-       
-                SqlDataReader reader = command.ExecuteReader();
-                try
-                {
-                    while (reader.Read())
-                    {
-                        Tables.Add( (string)reader[0] );
-                    }
-                }
-                finally
-                {
-                    // Always call Close when done reading.
-                    reader.Close();
-                }
-                return Tables;
-        }
+            string queryString = String.Format("Use {0} SELECT Name FROM dbo.sysobjects WHERE (xtype = 'U');", DataBase);
+            SqlCommand command = new SqlCommand(
+                queryString, cn);
 
-        public static DataSet RunQuery(SqlCommand sqlQuery, SqlConnection cn)
-        {
-            SqlDataAdapter dbAdapter = new SqlDataAdapter();
-            dbAdapter.SelectCommand = sqlQuery;
-            sqlQuery.Connection = cn; ;
-            DataSet resultsDataSet = new DataSet();
-            //заполняем DataSet
+            SqlDataReader reader = command.ExecuteReader();
             try
             {
-                dbAdapter.Fill(resultsDataSet);
+                while (reader.Read())
+                {
+                    Tables.Add((string)reader[0]);
+                }
             }
-            catch
+            finally
             {
-               throw new EntryPointNotFoundException();
+                // Always call Close when done reading.
+                reader.Close();
             }
+            return Tables;
+        }
+
+        public static DataSet RunQuery(SqlCommand sqlQuery)
+        {
+            DataSet resultsDataSet = new DataSet();
+            using (SqlConnection sqlConnection = new SqlConnection("Data Source=DEUSPC;Initial Catalog=TestWeb;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False"))//type here your own sqlConnection
+            {
+
+                string query = sqlQuery.CommandText;
+                //Build a command that will execute your SQL
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+
+
+                //Open your connection prior to executing the Command
+                sqlConnection.Open();
+
+
+                SqlDataAdapter dbAdapter = new SqlDataAdapter();
+                dbAdapter.SelectCommand = sqlQuery;
+                sqlQuery.Connection = sqlConnection;
+
+                //заполняем DataSet
+                try
+                {
+                    dbAdapter.Fill(resultsDataSet);
+                }
+                catch
+                {
+                    throw new EntryPointNotFoundException();
+                }
+            }
+
             return resultsDataSet;
         }
 
 
         [WebMethod()]
         [System.Web.Script.Services.ScriptMethod()]
-        public static DataTable Input(string sql, SqlConnection cn)
+        public static DataSet Input(string sql)
         {
             DataSet resultSet = new DataSet();
-            DataTable resultTable = new DataTable();
-            
+
+
             SqlCommand sqlQuery = new SqlCommand(sql);
 
-            
-            resultSet = RunQuery(sqlQuery, cn);
 
-            resultTable = resultSet.Tables[0];
+            resultSet = RunQuery(sqlQuery);
 
-           return  resultTable;
-           
-            
+
+
+            return resultSet;
+
+
         }
 
     }

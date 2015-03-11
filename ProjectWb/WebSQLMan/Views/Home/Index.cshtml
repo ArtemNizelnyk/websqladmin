@@ -1,10 +1,10 @@
 ﻿@using WebSQLMan.SQL;
 
 @{
-   
+
     Layout = "~/Views/Shared/_Layout.cshtml";
     var X = Html.X();
-    }
+}
 <html>
 <head>
 
@@ -14,6 +14,9 @@
 </head>
 <body>
 
+    <script type="text/javascript">
+        var myText = document.getElementById("SQLComm").value
+    </script>
 
     @(Html.X().ResourceManager())
     @(X.Viewport() // main page view create
@@ -139,27 +142,37 @@
     .Height(150)
     .BodyPadding(6)
     .Layout(LayoutType.Fit)
-                    
+
                    .Items(
-            X.Button().Text("RunSQL")
-            .MaxWidth(100)
-            .MaxHeight(50)
-            .DirectEvents(de =>
-            {
-                de.Click.Url = Url.Action("Test");
-                de.Click.ExtraParams.Add(new { containerId = "CenterResult" }); // + query=SQLComm для рабочей версии
-            })
-            ,
+                    Html.X().Button()
+                                    .Text("Submit")
+                                    .Icon(Icon.Lightning)
+                                    .FormBind(true)
+                                    .MaxHeight(30)
+                                    .MaxWidth(50)
+                                    .DirectEvents(de =>
+                                                        {
+                                                            de.Click.Url = Url.Action("Run");
+                                                            de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                                        }
+                                    )
+
+                                    ,
                     X.TextArea()
+                    .Editable(true)
                     .ID("SQLComm")
-                    .Text("Type ur query here")
+                    .Value(@ViewBag.Message)
                     .Width(400)
-                  
-                    
-                                                
-                        
                                             )
                                             )
     )
-</body>>
+</body>
+
+
+
+
+
+
+
 </html>
