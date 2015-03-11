@@ -9,44 +9,39 @@ using Ext.Net;
 
 namespace WebSQLMan.Controllers
 {
+
     public class HomeController : Controller
     {
         // GET: Home
         public ActionResult Index()
         {
-
+            ViewBag.Message = "Type your query here";
 
             return View();
 
         }
 
-        public Ext.Net.MVC.PartialViewResult Test(string containerId)
+
+        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
         {
+            DataTable dt = new DataTable();
 
+            DataSet ds = SQL.Func.Input(query);
 
-            ViewData["Message"] = "Welcome to ASP.NET MVC!";
-
-            DataTable dt = new DataTable("MyTable");
-            dt.Columns.Add(new DataColumn("Col1", typeof(string)));
-            dt.Columns.Add(new DataColumn("Col2", typeof(string)));
-            dt.Columns.Add(new DataColumn("Col3", typeof(string)));
-
-            for (int i = 0; i < 3; i++)
+            if (ds.Tables.Count > 0)
             {
-                DataRow row = dt.NewRow();
-                row["Col1"] = "col 1, row " + i;
-                row["Col2"] = "col 2, row " + i;
-                row["Col3"] = "col 3, row " + i;
-                dt.Rows.Add(row);
+                dt = ds.Tables[0];
             }
+
 
             return new Ext.Net.MVC.PartialViewResult
             {
-                ViewName = "Test",
+                ViewName = "Run",
                 ContainerId = containerId,
                 Model = dt, //passing the DataTable as my Model
                 ClearContainer = true,
                 RenderMode = RenderMode.AddTo
+
             };
         }
     }

@@ -1,0 +1,12 @@
+﻿@model System.Data.DataTable
+@using System.Data;
+<div>
+    @(
+ Html.X().GridPanelFor(Model)
+                .Title(Model.TableName)
+                .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.StretchMax })
+                .ForceFit(true)
+
+    )
+</div>
+
