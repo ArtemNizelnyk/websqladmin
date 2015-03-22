@@ -55,12 +55,17 @@
                         .Html("Some Connections Here"),
 
                      X.Panel()
+                        .ID("TreePanel")
                         .Title("Databases")
                         .Border(false)
                         .BodyPadding(6)
                         .Icon(Icon.Database)
-                        .Html("Database Tree, created from sys.dba file"),
-
+                        .Html("Database Tree, created from sys.dba file")
+                        .Loader(X.ComponentLoader()
+                            .Url(Url.Action("BasesTree"))
+                            .Params(new {containerId = "TreePanel"})
+                            .Mode(LoadMode.Script)),
+                            
                      X.Panel()
                         .Title("Tools")
                         .Border(false)
@@ -157,8 +162,7 @@
                                                             de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
                                                         }
                                     )
-
-                                    ,
+                                            ,
                     X.TextArea()
                     .Editable(true)
                     .ID("SQLComm")
