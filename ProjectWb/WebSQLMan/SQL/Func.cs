@@ -89,10 +89,10 @@ namespace WebSQLMan.SQL
             return Tables;
         }
 
-        public static DataSet RunQuery(SqlCommand sqlQuery)
+        public static DataSet RunQuery(SqlCommand sqlQuery, string server)
         {
             DataSet resultsDataSet = new DataSet();
-            using (SqlConnection sqlConnection = new SqlConnection("Data Source=Serj_89;Initial Catalog=master;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False"))//type here your own sqlConnection
+            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog=master;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False",server)))//type here your own sqlConnection
             {
 
                 string query = sqlQuery.CommandText;
@@ -125,7 +125,7 @@ namespace WebSQLMan.SQL
 
         [WebMethod()]
         [System.Web.Script.Services.ScriptMethod()]
-        public static DataSet Input(string sql)
+        public static DataSet Input(string sql, string server)
         {
             DataSet resultSet = new DataSet();
 
@@ -133,7 +133,7 @@ namespace WebSQLMan.SQL
             SqlCommand sqlQuery = new SqlCommand(sql);
 
 
-            resultSet = RunQuery(sqlQuery);
+            resultSet = RunQuery(sqlQuery,server);
 
 
 

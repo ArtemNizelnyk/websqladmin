@@ -118,6 +118,8 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jstree.js" />
+    <Content Include="Scripts\jstree.min.js" />
     <Content Include="Scripts\libs\document-register-element.js" />
     <Content Include="Scripts\libs\jquery.js" />
     <Content Include="Scripts\libs\require.js" />

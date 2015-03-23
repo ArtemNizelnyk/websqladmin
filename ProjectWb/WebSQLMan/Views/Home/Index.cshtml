@@ -1,4 +1,5 @@
 ﻿@using WebSQLMan.SQL;
+@model WebSQLMan.Models.ConnectionParams
 
 @{
 
@@ -63,8 +64,8 @@
                         .Html("Database Tree, created from sys.dba file")
                         .Loader(X.ComponentLoader()
                             .Url(Url.Action("BasesTree"))
-                            .Params(new {containerId = "TreePanel"})
-                            .Mode(LoadMode.Script)),
+                            .Params(new {containerId = "TreePanel", server = @Model.ServerName})
+                            .Mode(LoadMode.Data)),
                             
                      X.Panel()
                         .Title("Tools")
@@ -159,7 +160,7 @@
                                                         {
                                                             de.Click.Url = Url.Action("Run");
                                                             de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName });
                                                         }
                                     )
                                             ,

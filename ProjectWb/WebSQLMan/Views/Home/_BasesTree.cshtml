@@ -1,11 +1,9 @@
 ﻿@using System.Data
-<html>
-<head>
-    <script src="~/Scripts/jquery-1.10.2.js"></script>
+
+    @*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
     <script src="~/Scripts/libs/jquery.js">  </script>
     <script src="~/Scripts/jstree.js">  </script>
     <link rel="stylesheet" href="~/Scripts/themes/default/style.css" />
-
 
     <script type="text/javascript">
 
@@ -28,7 +26,8 @@
                             return {
                                 'id': node.id,
                                 'NodeData': node.data,
-                                'NodeText': node.text
+                                'NodeText': node.text,
+                                'server': ViewBag.server
                             };
                         }
                     }
@@ -41,15 +40,9 @@
 
     </script>
 
-    <title> Index </title>
-</head>
 <body>
 
     <div id="demo1">
     </div>
 
 </body>
-
-
-
-</html>
