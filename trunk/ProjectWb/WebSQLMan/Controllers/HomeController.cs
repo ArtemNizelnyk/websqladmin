@@ -27,11 +27,11 @@ namespace WebSQLMan.Controllers
         }
 
 
-        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId, string server)
+        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId, string server, string db)
         {
             DataTable dt = new DataTable();
 
-            DataSet ds = SQL.Func.Input(query, server);
+            DataSet ds = SQL.Func.Input(query, server, db);
 
             if (ds.Tables.Count > 0)
             {
@@ -71,9 +71,9 @@ namespace WebSQLMan.Controllers
         }
 
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-        public JsonResult GetChildren(string id, string NodeData, string NodeText, string server)
+        public JsonResult GetChildren(string id, string NodeData, string NodeText, ConnectionParams CnParams)
         {
-            string Server = server;
+            string Server = CnParams.ServerName;
 
             SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
             cnBuilder.DataSource = Server;
