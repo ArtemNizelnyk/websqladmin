@@ -64,7 +64,7 @@
                         .Html("Database Tree, created from sys.dba file")
                         .Loader(X.ComponentLoader()
                             .Url(Url.Action("BasesTree"))
-                            .Params(new {containerId = "TreePanel", server = @Model.ServerName})
+                            .Params(new {containerId = "TreePanel", CnParams = @Model})
                             .Mode(LoadMode.Data)),
                             
                      X.Panel()
@@ -160,7 +160,7 @@
                                                         {
                                                             de.Click.Url = Url.Action("Run");
                                                             de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName });
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db=@Model.DataBase });
                                                         }
                                     )
                                             ,

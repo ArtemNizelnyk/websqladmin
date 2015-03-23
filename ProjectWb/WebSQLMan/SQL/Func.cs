@@ -122,10 +122,42 @@ namespace WebSQLMan.SQL
             return resultsDataSet;
         }
 
+        public static DataSet RunQuery(SqlCommand sqlQuery, string server, string DB)
+        {
+            DataSet resultsDataSet = new DataSet();
+            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog={1};Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server, DB)))//type here your own sqlConnection
+            {
+
+                string query = sqlQuery.CommandText;
+                //Build a command that will execute your SQL
+                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+
+
+                //Open your connection prior to executing the Command
+                sqlConnection.Open();
+
+
+                SqlDataAdapter dbAdapter = new SqlDataAdapter();
+                dbAdapter.SelectCommand = sqlQuery;
+                sqlQuery.Connection = sqlConnection;
+
+                //заполняем DataSet
+                try
+                {
+                    dbAdapter.Fill(resultsDataSet);
+                }
+                catch
+                {
+                    throw new EntryPointNotFoundException();
+                }
+            }
+
+            return resultsDataSet;
+        }
 
         [WebMethod()]
         [System.Web.Script.Services.ScriptMethod()]
-        public static DataSet Input(string sql, string server)
+        public static DataSet Input(string sql, string server, string DB)
         {
             DataSet resultSet = new DataSet();
 
@@ -133,7 +165,7 @@ namespace WebSQLMan.SQL
             SqlCommand sqlQuery = new SqlCommand(sql);
 
 
-            resultSet = RunQuery(sqlQuery,server);
+            resultSet = RunQuery(sqlQuery,server, DB);
 
 
 
