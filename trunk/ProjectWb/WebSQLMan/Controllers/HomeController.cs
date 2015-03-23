@@ -10,6 +10,7 @@ using System.Web.Script.Services;
 using TestTree.Models;
 using WebSQLMan.SQL;
 using System.Data.SqlClient;
+using WebSQLMan.Models;
 
 namespace WebSQLMan.Controllers
 {
@@ -17,20 +18,20 @@ namespace WebSQLMan.Controllers
     public class HomeController : Controller
     {
         // GET: Home
-        public ActionResult Index()
+        public ActionResult Index( ConnectionParams cnParams )
         {
             ViewBag.Message = "Type your query here";
 
-            return View();
+            return View(cnParams);  // В дальнейшем [закешировать, а не передавать] cnParams!
 
         }
 
 
-        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
+        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId, string server)
         {
             DataTable dt = new DataTable();
 
-            DataSet ds = SQL.Func.Input(query);
+            DataSet ds = SQL.Func.Input(query, server);
 
             if (ds.Tables.Count > 0)
             {
@@ -49,13 +50,9 @@ namespace WebSQLMan.Controllers
             };
         }
 
-        //public Ext.Net.MVC.PartialViewResult _BasesTree(string containerId)
-        //{
-        //    return new Ext.Net.MVC.PartialViewResult(containerId);
-        //}
-
-        public Ext.Net.MVC.PartialViewResult BasesTree(string containerId)
+        public Ext.Net.MVC.PartialViewResult BasesTree(string containerId, string server)
         {
+            ViewBag.server = server;
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "_BasesTree",
@@ -74,9 +71,9 @@ namespace WebSQLMan.Controllers
         }
 
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-        public JsonResult GetChildren(string id, string NodeData, string NodeText)
+        public JsonResult GetChildren(string id, string NodeData, string NodeText, string server)
         {
-            string Server = "Serj_89";
+            string Server = server;
 
             SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
             cnBuilder.DataSource = Server;

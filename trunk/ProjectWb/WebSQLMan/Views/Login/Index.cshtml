@@ -10,15 +10,17 @@
 </head>
 <body>
     <div>
-        @using (Html.BeginForm("Connect", "Login"))
+        @using (Html.BeginForm("Index", "Home"))
         {
             <p>
                 @Html.LabelFor(x => x.ServerName)
-                @Html.DropDownListFor(x => x.ServerName, new SelectList(ViewBag.servers), new { id = "dropDownServers" })
+                @Html.TextBoxFor(x => x.ServerName)
+                @*@Html.DropDownList("downServer", new SelectList(ViewBag.servers), new { id = "dropDownServers" })*@
             </p>
             <p>
                 @Html.LabelFor(x => x.DataBase)
-                @Html.DropDownListFor(x => x.DataBase, new SelectList(new List<string>()))
+                @Html.TextBoxFor(x => x.DataBase)
+                @*@Html.DropDownList("downDB", new SelectList(new List<string>()))*@
             </p>
             <p>
                 Authentication
