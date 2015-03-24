@@ -15,9 +15,6 @@
 </head>
 <body>
 
-    <script type="text/javascript">
-        var myText = document.getElementById("SQLComm").value
-    </script>
 
     @(Html.X().ResourceManager())
     @(X.Viewport() // main page view create
@@ -29,13 +26,58 @@
                     .Layout(LayoutType.Auto)
                     .StyleSpec("padding-bottom:0px")
                     .Items(
-                    X.Button().ID("ConnectBtn").Icon(Icon.DatabaseConnect),
-                    X.Button().ID("RefreshBtn").Icon(Icon.DatabaseRefresh),
-                    X.Button().ID("RunBtn").Icon(Icon.ScriptStart),
-                    X.Button().ID("CreateNewBtn").Icon(Icon.New),
+
+                    X.Button()
+                    .ID("ConnectBtn")
+                    .Icon(Icon.DatabaseConnect)
+                            .ToolTip("New Connection")
+                            .DirectEvents(de =>
+                                    {
+                                        de.Click.Url = Url.Action("Dissconnect", "Home");
+                                    }),
+
+                    X.Button()
+                    .ID("RefreshBtn")
+                    .Icon(Icon.DatabaseRefresh)
+                            .ToolTip("Reconnect")
+                            .DirectEvents(de =>
+                                    {
+                                        de.Click.Url = Url.Action("Dissconnect", "Home");
+                                    }),
+
+                    X.Button()
+                    .ID("RunBtn")
+                    .Icon(Icon.ScriptStart)
+                    .ToolTip("Run query")
+                    .DirectEvents(de =>
+                                                          {
+                                                              de.Click.Url = Url.Action("Run");
+                                                              de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
+                                                              de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db = @Model.DataBase });
+                                                          }
+
+                                            ),
+
+                    X.Button()
+                    .ID("CreateNewBtn")
+                    .Icon(Icon.New)
+                    .ToolTip("New query"),
+
                     X.ToolbarFill(),
+
                     X.ToolbarSeparator(),
-                    X.Button().ID("ExitBtn").Icon(Icon.Disconnect)
+
+                    X.Button()
+                    .ID("ExitBtn")
+                    .Icon(Icon.Disconnect)
+                    .ToolTip("Disconnect")
+                    .DirectEvents(de =>
+                            {
+                                de.Click.Url = Url.Action("Dissconnect", "Home");
+                                de.Click.Confirmation.ConfirmRequest = true;
+                                de.Click.Confirmation.Title = "Выход";
+                                de.Click.Confirmation.Message = "Вы уверены, что хотите выйти? Все измененные данные будут утеряны!";
+                            })
                     ),
 
             X.Panel() //create Object browser
@@ -58,15 +100,18 @@
                      X.Panel()
                         .ID("TreePanel")
                         .Title("Databases")
-                        .Border(false)
+                        .Border(true)
                         .BodyPadding(6)
                         .Icon(Icon.Database)
-                        .Html("Database Tree, created from sys.dba file")
-                        .Loader(X.ComponentLoader()
-                            .Url(Url.Action("BasesTree"))
-                            .Params(new {containerId = "TreePanel", CnParams = @Model})
-                            .Mode(LoadMode.Data)),
-                            
+                        .Layout(LayoutType.Fit)
+                        .Loader(
+                        Html.X().ComponentLoader()
+                        .Url(Url.Action("BasesTree"))
+                        .Mode(LoadMode.Script)
+                                .Params(new { containerId="TreePanel"})
+                          )
+                            ,
+
                      X.Panel()
                         .Title("Tools")
                         .Border(false)
@@ -118,26 +163,9 @@
     .MinWidth(225)
     .Width(225)
     .Layout(LayoutType.Fit)
-    .Items(
-    X.TabPanel()
-    .ActiveTabIndex(1)
-    .TabPosition(TabPosition.Bottom)
-    .Border(false)
-    .Items(
-    X.Panel()
-    .Title("Tab 1")
-    .Border(false)
-    .BodyPadding(6)
-    .Html("Now it's just panel, but will be somth like messagebox with error_messages or success"),
+    .Html("Now it's just panel, but will be somth like messagebox with error_messages or success")
 
-    X.Panel()
-    .Title("Tab 2")
-    .Closable(true)
-    .Border(false)
-    .BodyPadding(6)
-    .Html(" Tab 2")
-    )
-    ),
+    ,
 
     X.Panel() //down panel for queries
     .Title("new query")
@@ -160,9 +188,12 @@
                                                         {
                                                             de.Click.Url = Url.Action("Run");
                                                             de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db=@Model.DataBase });
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db = @Model.DataBase });
+
                                                         }
+
                                     )
+
                                             ,
                     X.TextArea()
                     .Editable(true)
@@ -170,9 +201,80 @@
                     .Value(@ViewBag.Message)
                     .Width(400)
                                             )
-                                            )
+    )
     )
 </body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
