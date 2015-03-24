@@ -6,7 +6,9 @@ using System.Data.Sql;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Services;
+using System.Web.UI;
 
 namespace WebSQLMan.SQL
 {
@@ -24,6 +26,7 @@ namespace WebSQLMan.SQL
             return servers;
         }
 
+         [OutputCache(Duration = 50, Location = OutputCacheLocation.Server)]
         public static SqlConnection ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
         {
             SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
@@ -109,14 +112,7 @@ namespace WebSQLMan.SQL
                 sqlQuery.Connection = sqlConnection;
 
                 //заполняем DataSet
-                try
-                {
                     dbAdapter.Fill(resultsDataSet);
-                }
-                catch
-                {
-                    throw new EntryPointNotFoundException();
-                }
             }
 
             return resultsDataSet;
@@ -132,7 +128,7 @@ namespace WebSQLMan.SQL
                 //Build a command that will execute your SQL
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
-
+                try{
                 //Open your connection prior to executing the Command
                 sqlConnection.Open();
 
@@ -142,13 +138,12 @@ namespace WebSQLMan.SQL
                 sqlQuery.Connection = sqlConnection;
 
                 //заполняем DataSet
-                try
-                {
+                
                     dbAdapter.Fill(resultsDataSet);
                 }
-                catch
+                catch(SqlException)
                 {
-                    throw new EntryPointNotFoundException();
+                    
                 }
             }
 

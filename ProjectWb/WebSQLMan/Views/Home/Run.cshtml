@@ -6,6 +6,12 @@
                 .Title(Model.TableName)
                 .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.StretchMax })
                 .ForceFit(true)
+                    .BottomBar(
+                    Html.X().PagingToolbar()
+                        .DisplayInfo(true)
+                        .DisplayMsg("Displaying records {0} - {1} of {2}")
+                        .EmptyMsg("No records to display")
+                )
 
     )
 </div>
