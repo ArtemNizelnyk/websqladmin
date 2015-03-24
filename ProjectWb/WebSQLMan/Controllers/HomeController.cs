@@ -11,6 +11,7 @@ using TestTree.Models;
 using WebSQLMan.SQL;
 using System.Data.SqlClient;
 using WebSQLMan.Models;
+using System.Web.Caching;
 
 namespace WebSQLMan.Controllers
 {
@@ -23,7 +24,9 @@ namespace WebSQLMan.Controllers
         {
             ViewBag.Message = "Type your query here";
 
-            return View(cnParams);  // В дальнейшем [закешировать, а не передавать] cnParams!
+            HttpContext.Cache["CnInfo"] = cnParams;
+    
+            return View();  
 
         }
         public RedirectToRouteResult Dissconnect ()
@@ -32,10 +35,12 @@ namespace WebSQLMan.Controllers
         }
 
 
-        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId, string server, string db)
+        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
         {
             DataTable dt = new DataTable();
-
+            ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
+            string server = cnP.ServerName;
+            string db = cnP.DataBase;
             DataSet ds = SQL.Func.Input(query, server, db);
 
             if (ds.Tables.Count > 0)
@@ -81,11 +86,13 @@ namespace WebSQLMan.Controllers
         [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
         public JsonResult GetChildren(string id, string NodeData, string NodeText)
         {
-            string Server = "DEUSPC";
+            ConnectionParams CnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
+
+            string Server = CnP.ServerName;
 
             SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
             cnBuilder.DataSource = Server;
-            cnBuilder.InitialCatalog = "master";
+            cnBuilder.InitialCatalog = CnP.DataBase;
             cnBuilder.IntegratedSecurity = true;
             using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))  // Захардкодил!!  В дальнейшем достать конекшн из КЄША
             {
