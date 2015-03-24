@@ -53,7 +53,7 @@
                                                           {
                                                               de.Click.Url = Url.Action("Run");
                                                               de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                              de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db = @Model.DataBase });
+                                                              de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
                                                           }
 
                                             ),
@@ -188,7 +188,7 @@
                                                         {
                                                             de.Click.Url = Url.Action("Run");
                                                             de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult", server = @Model.ServerName, db = @Model.DataBase });
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult"});
 
                                                         }
 
