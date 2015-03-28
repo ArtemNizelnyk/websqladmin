@@ -60,7 +60,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -68,7 +67,6 @@
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -121,29 +119,25 @@
     <Content Include="App_Readme\Transformer.NET\README.txt" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Scripts\bootstrap.js" />
+    <Content Include="Content\Scripts\bootstrap.min.js" />
+    <Content Include="Content\Scripts\jstree.js" />
+    <Content Include="Content\Scripts\jstree.min.js" />
+    <Content Include="Content\Scripts\libs\document-register-element.js" />
+    <Content Include="Content\Scripts\libs\jquery.js" />
+    <Content Include="Content\Scripts\libs\require.js" />
+    <Content Include="Content\Scripts\modernizr-2.6.2.js" />
+    <Content Include="Content\Scripts\themes\default\32px.png" />
+    <Content Include="Content\Scripts\themes\default\40px.png" />
+    <Content Include="Content\Scripts\themes\default\style.css" />
+    <Content Include="Content\Scripts\themes\default\style.min.css" />
+    <Content Include="Content\Scripts\themes\default\throbber.gif" />
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\jquery-1.10.2.js" />
-    <Content Include="Scripts\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\jstree.js" />
-    <Content Include="Scripts\jstree.min.js" />
-    <Content Include="Scripts\libs\document-register-element.js" />
-    <Content Include="Scripts\libs\jquery.js" />
-    <Content Include="Scripts\libs\require.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\themes\default\32px.png" />
-    <Content Include="Scripts\themes\default\40px.png" />
-    <Content Include="Scripts\themes\default\style.css" />
-    <Content Include="Scripts\themes\default\style.min.css" />
-    <Content Include="Scripts\themes\default\throbber.gif" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
