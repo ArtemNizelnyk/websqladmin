@@ -101,9 +101,7 @@
     <Content Include="Content\Scripts\bootstrap.min.js" />
     <Content Include="Content\Scripts\jstree.js" />
     <Content Include="Content\Scripts\jstree.min.js" />
-    <Content Include="Content\Scripts\libs\document-register-element.js" />
     <Content Include="Content\Scripts\libs\jquery.js" />
-    <Content Include="Content\Scripts\libs\require.js" />
     <Content Include="Content\Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\Scripts\themes\default\32px.png" />
     <Content Include="Content\Scripts\themes\default\40px.png" />
