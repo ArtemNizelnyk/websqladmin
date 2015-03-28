@@ -1,46 +1,41 @@
 ﻿@using System.Data
 
-    @*<script src="~/Scripts/jquery-1.10.2.js"></script>*@
-    
-    
-    <link rel="stylesheet" href="~/Scripts/themes/default/style.css" />
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(document).ready(function () {
+    $(document).ready(function () {
 
-            $('#demo1').jstree({
-                'core': {
-                    "themes": {
-                        "dots": true,
-                        "icons": true
-                    },
-                    "check_callback": true,
-                    'data': {
-                        'url': function (node) {
-                            return node.id === '#' ?
-                              'Home/GetRootNodes' :
-                              'Home/GetChildren';
-                        },
-                        'data': function (node) {
-                            return {
-                                'id': node.id,
-                                'NodeData': node.data,
-                                'NodeText': node.text
-                                
-                            };
-                        }
-                    }
+        $('#demo1').jstree({
+            'core': {
+                "themes": {
+                    "dots": true,
+                    "icons": true
                 },
-                "plugins": ["contextmenu", "themes", "ui"]
-            }).bind("select_node.jstree", function (event, data) {
-                alert("Some action");
-            })
+                "check_callback": true,
+                'data': {
+                    'url': function (node) {
+                        return node.id === '#' ?
+                          'Home/GetRootNodes' :
+                          'Home/GetChildren';
+                    },
+                    'data': function (node) {
+                        return {
+                            'id': node.id,
+                            'NodeData': node.data,
+                            'NodeText': node.text
+
+                        };
+                    }
+                }
+            },
+            "plugins": ["contextmenu", "themes", "ui"]
+        }).bind("select_node.jstree", function (event, data) {
+            alert("Some action");
         })
+    })
 
-    </script>
+</script>
 
 
-
-    <div id="demo1">
-    </div>
+<div id="demo1">
+</div>

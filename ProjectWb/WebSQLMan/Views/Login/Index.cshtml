@@ -4,61 +4,55 @@
     ViewBag.Title = "Index";
 }
 
-<head>
-    @*<script src="~/Scripts/jquery-1.8.2.min.js"></script>*@
-    <title>Index</title>
-</head>
-<body>
-    <div>
-        @using (Html.BeginForm("Index", "Home"))
-        {
-            <p>
-                @Html.LabelFor(x => x.ServerName)
-                @Html.TextBoxFor(x => x.ServerName)
-                @*@Html.DropDownList("downServer", new SelectList(ViewBag.servers), new { id = "dropDownServers" })*@
-            </p>
-            <p>
-                @Html.LabelFor(x => x.DataBase)
-                @Html.TextBoxFor(x => x.DataBase)
-                @*@Html.DropDownList("downDB", new SelectList(new List<string>()))*@
-            </p>
-            <p>
-                Authentication
-                @Html.DropDownListFor(x => x.Authentication, new[]{
+<div>
+    @using (Html.BeginForm("Index", "Home"))
+    {
+        <p>
+            @Html.LabelFor(x => x.ServerName)
+            @Html.TextBoxFor(x => x.ServerName)
+            @*@Html.DropDownList("downServer", new SelectList(ViewBag.servers), new { id = "dropDownServers" })*@
+        </p>
+        <p>
+            @Html.LabelFor(x => x.DataBase)
+            @Html.TextBoxFor(x => x.DataBase)
+            @*@Html.DropDownList("downDB", new SelectList(new List<string>()))*@
+        </p>
+        <p>
+            Authentication
+            @Html.DropDownListFor(x => x.Authentication, new[]{
             new SelectListItem(){Text = "SQL Server Authentication", Value="SqlAuthentication"},
             new SelectListItem(){Text = "Windows Authentication", Value="WindowsAuthentication"}})
-            </p>
-            <p>
-                @Html.LabelFor(x => x.Login)
-                @Html.TextBoxFor(x => x.Login)
-            </p>
-            <p>
-                @Html.LabelFor(x => x.Password)
-                @Html.TextBoxFor(x => x.Password)
-            </p>
-            <input type="submit" value="Connect" />
-        }
-    </div>
-    <script type="text/javascript">
-        function getDatabases() {
-            $.ajax({
-                url: "AJAX/Index",
-                type: "GET",
-                data: "server=" + $("#dropDownServers").val().toString(),
-                dataType: "html",
-                success:
-                    function (data) {
-                        $("#DataBase").html(data);
-                    }
-            }
-                )
-        }
-
-        $(document).ready(function () {
-            $("#DataBase").change(
-                getDatabases()
-                )
+        </p>
+        <p>
+            @Html.LabelFor(x => x.Login)
+            @Html.TextBoxFor(x => x.Login)
+        </p>
+        <p>
+            @Html.LabelFor(x => x.Password)
+            @Html.TextBoxFor(x => x.Password)
+        </p>
+        <input type="submit" value="Connect" />
+    }
+</div>
+<script type="text/javascript">
+    function getDatabases() {
+        $.ajax({
+            url: "AJAX/Index",
+            type: "GET",
+            data: "server=" + $("#dropDownServers").val().toString(),
+            dataType: "html",
+            success:
+                function (data) {
+                    $("#DataBase").html(data);
+                }
         }
             )
-    </script>
-</body>
+    }
+
+    $(document).ready(function () {
+        $("#DataBase").change(
+            getDatabases()
+            )
+    }
+        )
+</script>

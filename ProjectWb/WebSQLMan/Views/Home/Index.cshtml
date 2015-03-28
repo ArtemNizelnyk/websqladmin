@@ -3,21 +3,14 @@
 
 @{
 
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "WebSqlAdministrator";
     var X = Html.X();
 }
-<html>
-<head>
 
-    <title>WebSqlAdministrator</title>
+<link type="text/css" rel="stylesheet" href="http://speed.ext.net/www/intro/css/main.css" />
 
-    <link type="text/css" rel="stylesheet" href="http://speed.ext.net/www/intro/css/main.css" />
-</head>
-<body>
-
-
-    @(Html.X().ResourceManager())
-    @(X.Viewport() // main page view create
+@(Html.X().ResourceManager())
+@(X.Viewport() // main page view create
         .Layout(LayoutType.Border)
         .Items(
                     X.Toolbar()
@@ -108,7 +101,7 @@
                         Html.X().ComponentLoader()
                         .Url(Url.Action("BasesTree"))
                         .Mode(LoadMode.Script)
-                                .Params(new { containerId="TreePanel"})
+                                .Params(new { containerId = "TreePanel" })
                           )
                             ,
 
@@ -188,7 +181,7 @@
                                                         {
                                                             de.Click.Url = Url.Action("Run");
                                                             de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult"});
+                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
 
                                                         }
 
@@ -202,9 +195,7 @@
                     .Width(400)
                                             )
     )
-    )
-</body>
-
+)
 
 
 
