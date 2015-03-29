@@ -15,17 +15,17 @@ namespace WebSQLMan.Controllers
     public class HomeController : Controller
     {
         // GET: Home
-        
-        public ActionResult Index( ConnectionParams cnParams )
+
+        public ActionResult Index(ConnectionParams cnParams)
         {
             ViewBag.Message = "Type your query here";
 
             HttpContext.Cache["CnInfo"] = cnParams;
-    
-            return View();  
+
+            return View();
 
         }
-        public RedirectToRouteResult Dissconnect ()
+        public RedirectToRouteResult Dissconnect()
         {
             return RedirectToAction("Index", "Login");
         }
@@ -43,29 +43,29 @@ namespace WebSQLMan.Controllers
             {
                 dt = ds.Tables[0];
             }
-           
+
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "Run",
-                
+
                 ContainerId = containerId,
                 Model = dt, //passing the DataTable as my Model
                 ClearContainer = true,
-                RenderMode = RenderMode.AddTo
+                RenderMode = RenderMode.RenderTo
 
             };
         }
 
-       
+
 
         public Ext.Net.MVC.PartialViewResult BasesTree(string containerId)
         {
-            
+
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "_BasesTree",
                 ContainerId = containerId,
-                 WrapByScriptTag = false, 
+                WrapByScriptTag = false,
                 ClearContainer = true,
                 RenderMode = RenderMode.RenderTo
             };
@@ -90,9 +90,9 @@ namespace WebSQLMan.Controllers
             cnBuilder.DataSource = Server;
             cnBuilder.InitialCatalog = CnP.DataBase;
             cnBuilder.IntegratedSecurity = true;
-            using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))  // Захардкодил!!  В дальнейшем достать конекшн из КЄША
+            using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))
             {
-                //CurrConn.Open();
+
                 List<G_JSTree> Nodes = new List<G_JSTree>();
 
                 G_JSTree Node = new G_JSTree();
@@ -159,35 +159,38 @@ namespace WebSQLMan.Controllers
                         Node.data = "Synonyms " + "(DB)" + NodeText + "(-DB)";
                         Node.text = "Synonyms";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
                         Node.data = "Programmability " + "(DB)" + NodeText + "(-DB)";
                         Node.text = "Programmability";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
-                        Node.data = "Service Broker " + "(DB)" + NodeText + "(-DB)"; ;
+                        Node.data = "Service Broker " + "(DB)" + NodeText + "(-DB)";
+                        ;
                         Node.text = "Service Broker";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
-                        Node.data = "Storage " + "(DB)" + NodeText + "(-DB)"; ;
+                        Node.data = "Storage " + "(DB)" + NodeText + "(-DB)";
+                        ;
                         Node.text = "Storage";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
-                        Node.data = "Security " + "(DB)" + NodeText + "(-DB)"; ;
+                        Node.data = "Security " + "(DB)" + NodeText + "(-DB)";
+                        ;
                         Node.text = "Security";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         #endregion
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
@@ -239,21 +242,21 @@ namespace WebSQLMan.Controllers
                         Node.data = "Keys " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
                         Node.text = "Keys";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
                         Node.data = "Indexes " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
                         Node.text = "Indexes";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
                         Node.data = "statistics " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
                         Node.text = "statistics";
                         Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+
                         Nodes.Add(Node);
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
                     case "Constraints":
