@@ -75,13 +75,14 @@
 
             X.Panel() //create Object browser
                 .Title("Object Explorer")
+                .ID("westPanel")
                 .Region(Region.West)
                 .Layout(LayoutType.Accordion)
                 .Width(225)
+                .AutoScroll(true)
                 .MinWidth(225)
                 .MaxWidth(400)
                 .Split(true)
-                .Collapsible(true)
                 .Items(
                     X.Panel()
                         .Title("Connection")
@@ -89,20 +90,21 @@
                         .BodyPadding(6)
                         .Icon(Icon.DatabaseConnect)
                         .Html("Some Connections Here"),
+                  
 
                      X.Panel()
                         .ID("TreePanel")
                         .Title("Databases")
                         .Border(true)
-                        .BodyPadding(6)
+                        .MaxHeight(400)
                         .Icon(Icon.Database)
-                        .Layout(LayoutType.Fit)
                         .Loader(
                         Html.X().ComponentLoader()
                         .Url(Url.Action("BasesTree"))
                         .Mode(LoadMode.Script)
                                 .Params(new { containerId = "TreePanel" })
                           )
+                          
                             ,
 
                      X.Panel()
@@ -137,6 +139,7 @@
                     .Region(Region.Center)
                     .BodyPadding(10)
                     .Header(false)
+                    .AutoScroll(true)
 
                         ,
 

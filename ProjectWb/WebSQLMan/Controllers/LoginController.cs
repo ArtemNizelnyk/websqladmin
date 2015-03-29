@@ -19,7 +19,7 @@ namespace WebSQLMan.Controllers
         [HttpPost]
         public ActionResult Connect(ConnectionParams cnParams)
         {
-           
+
             SqlConnection cn = SQL.Func.ConnectToSQLserver(cnParams.ServerName);
             List<string> CurTables = SQL.Func.GetTablesOnDataBase(cn, cnParams.DataBase);
             return View();
