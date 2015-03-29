@@ -10,12 +10,12 @@
         <p>
             @Html.LabelFor(x => x.ServerName)
             @Html.TextBoxFor(x => x.ServerName)
-            @*@Html.DropDownList("downServer", new SelectList(ViewBag.servers), new { id = "dropDownServers" })*@
+
         </p>
         <p>
             @Html.LabelFor(x => x.DataBase)
             @Html.TextBoxFor(x => x.DataBase)
-            @*@Html.DropDownList("downDB", new SelectList(new List<string>()))*@
+
         </p>
         <p>
             Authentication
@@ -34,25 +34,3 @@
         <input type="submit" value="Connect" />
     }
 </div>
-<script type="text/javascript">
-    function getDatabases() {
-        $.ajax({
-            url: "AJAX/Index",
-            type: "GET",
-            data: "server=" + $("#dropDownServers").val().toString(),
-            dataType: "html",
-            success:
-                function (data) {
-                    $("#DataBase").html(data);
-                }
-        }
-            )
-    }
-
-    $(document).ready(function () {
-        $("#DataBase").change(
-            getDatabases()
-            )
-    }
-        )
-</script>

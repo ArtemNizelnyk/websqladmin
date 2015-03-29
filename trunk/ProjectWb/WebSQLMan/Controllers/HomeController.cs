@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Services;
-using TestTree.Models;
 using WebSQLMan.Models;
 using WebSQLMan.SQL;
 
@@ -14,22 +13,17 @@ namespace WebSQLMan.Controllers
 
     public class HomeController : Controller
     {
-        // GET: Home
-        
-        public ActionResult Index( ConnectionParams cnParams )
+
+        public ActionResult Index(ConnectionParams cnParams)
         {
             ViewBag.Message = "Type your query here";
 
             HttpContext.Cache["CnInfo"] = cnParams;
-    
-            return View();  
+
+            return View();
 
         }
-        public RedirectToRouteResult Dissconnect ()
-        {
-            return RedirectToAction("Index", "Login");
-        }
-
+        
 
         public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
         {
@@ -43,11 +37,11 @@ namespace WebSQLMan.Controllers
             {
                 dt = ds.Tables[0];
             }
-           
+
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "Run",
-                
+
                 ContainerId = containerId,
                 Model = dt, //passing the DataTable as my Model
                 ClearContainer = true,
@@ -56,16 +50,16 @@ namespace WebSQLMan.Controllers
             };
         }
 
-       
+
 
         public Ext.Net.MVC.PartialViewResult BasesTree(string containerId)
         {
-            
+
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "_BasesTree",
                 ContainerId = containerId,
-                 WrapByScriptTag = false, 
+                WrapByScriptTag = false,
                 ClearContainer = true,
                 RenderMode = RenderMode.RenderTo
             };
