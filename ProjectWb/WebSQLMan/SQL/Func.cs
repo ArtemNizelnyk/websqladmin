@@ -48,20 +48,28 @@ namespace WebSQLMan.SQL
             String strConn = connection.ToString();
             //create connection
             SqlConnection sqlConn = new SqlConnection(strConn);
-            //open connection
-            sqlConn.Open();
-            //get databases
-            DataTable tblDatabases = sqlConn.GetSchema("Databases");
-            //close connection
-            sqlConn.Close();
-            //add to list
-            foreach (DataRow row in tblDatabases.Rows)
+            try
             {
-                String strDatabaseName = row["database_name"].ToString();
+                //open connection
+                sqlConn.Open();
+                //get databases
+                DataTable tblDatabases = sqlConn.GetSchema("Databases");
+                //close connection
+                sqlConn.Close();
 
-                databases.Add(strDatabaseName);
+
+                //add to list
+                foreach (DataRow row in tblDatabases.Rows)
+                {
+                    String strDatabaseName = row["database_name"].ToString();
+
+                    databases.Add(strDatabaseName);
+                }
             }
+            catch (SqlException)
+            {
 
+            }
             return databases;
         }
 
@@ -179,17 +187,22 @@ namespace WebSQLMan.SQL
             //create connection
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
-                //open connection
-                sqlConn.Open();
-                //get databases
-                SqlCommand Command = sqlConn.CreateCommand();
-                Command.CommandText = "SELECT * FROM sys.databases Where Name IN ('master','model','msdb','tempdb') OR Is_distributor = 1;";
-                SqlDataReader Reader = Command.ExecuteReader();
-                while (Reader.Read())
-                {
-                    databases.Add((string)Reader["Name"]);
+                try
+                {  //open connection
+                    sqlConn.Open();
+                    //get databases
+                    SqlCommand Command = sqlConn.CreateCommand();
+                    Command.CommandText = "SELECT * FROM sys.databases Where Name IN ('master','model','msdb','tempdb') OR Is_distributor = 1;";
+                    SqlDataReader Reader = Command.ExecuteReader();
+                    while (Reader.Read())
+                    {
+                        databases.Add((string)Reader["Name"]);
+                    }
                 }
+                catch(SqlException)
+                {
 
+                }
                 return databases;
             }
         }
@@ -206,17 +219,22 @@ namespace WebSQLMan.SQL
             //create connection
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
-                //open connection
-                sqlConn.Open();
-                //get databases
-                SqlCommand Command = sqlConn.CreateCommand();
-                Command.CommandText = "SELECT * FROM sys.databases Where Name NOT IN ('master','model','msdb','tempdb') AND Is_distributor <> 1;";
-                SqlDataReader Reader = Command.ExecuteReader();
-                while (Reader.Read())
-                {
-                    databases.Add((string)Reader["Name"]);
+                try
+                {//open connection
+                    sqlConn.Open();
+                    //get databases
+                    SqlCommand Command = sqlConn.CreateCommand();
+                    Command.CommandText = "SELECT * FROM sys.databases Where Name NOT IN ('master','model','msdb','tempdb') AND Is_distributor <> 1;";
+                    SqlDataReader Reader = Command.ExecuteReader();
+                    while (Reader.Read())
+                    {
+                        databases.Add((string)Reader["Name"]);
+                    }
                 }
+                catch   (SqlException)
+                {
 
+                }
                 return databases;
             }
         }
