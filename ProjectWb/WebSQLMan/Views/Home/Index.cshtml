@@ -1,5 +1,4 @@
 ﻿@using WebSQLMan.SQL;
-@model WebSQLMan.Models.ConnectionParams
 
 @{
 
@@ -26,7 +25,7 @@
                             .ToolTip("New Connection")
                             .DirectEvents(de =>
                                     {
-                                        de.Click.Url = Url.Action("Dissconnect", "Home");
+                                        de.Click.Url = Url.Action("Dissconnect", "Login");
                                     }),
 
                     X.Button()
@@ -35,7 +34,7 @@
                             .ToolTip("Reconnect")
                             .DirectEvents(de =>
                                     {
-                                        de.Click.Url = Url.Action("Dissconnect", "Home");
+                                        de.Click.Url = Url.Action("Dissconnect", "Login");
                                     }),
 
                     X.Button()
@@ -66,7 +65,7 @@
                     .ToolTip("Disconnect")
                     .DirectEvents(de =>
                             {
-                                de.Click.Url = Url.Action("Dissconnect", "Home");
+                                de.Click.Url = Url.Action("Dissconnect", "Login");
                                 de.Click.Confirmation.ConfirmRequest = true;
                                 de.Click.Confirmation.Title = "Выход";
                                 de.Click.Confirmation.Message = "Вы уверены, что хотите выйти? Все измененные данные будут утеряны!";

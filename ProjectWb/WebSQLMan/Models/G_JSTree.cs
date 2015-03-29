@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestTree.Models
+namespace WebSQLMan.Models
 {
     public class G_JSTree
     {

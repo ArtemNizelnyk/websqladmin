@@ -7,8 +7,6 @@ namespace WebSQLMan.Controllers
 {
     public class LoginController : Controller
     {
-        //
-        // GET: /Home/
 
         public ActionResult Index()
         {
@@ -16,13 +14,10 @@ namespace WebSQLMan.Controllers
 
             return View();
         }
-        [HttpPost]
-        public ActionResult Connect(ConnectionParams cnParams)
+
+        public RedirectToRouteResult Dissconnect()
         {
-           
-            SqlConnection cn = SQL.Func.ConnectToSQLserver(cnParams.ServerName);
-            List<string> CurTables = SQL.Func.GetTablesOnDataBase(cn, cnParams.DataBase);
-            return View();
+            return RedirectToAction("Index", "Login");
         }
 
     }
