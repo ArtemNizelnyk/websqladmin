@@ -8,12 +8,12 @@ namespace WebSQLMan
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Content/Scripts/libs/jquery.js", "~/Content/Scripts/bootstrap.min.js"));
+                        "~/Scripts/libs/jquery.js", "~/Scripts/bootstrap.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jstree").Include(
-                        "~/Content/Scripts/jstree.js"));
+                        "~/Scripts/jstree.js"));
 
-            bundles.Add(new StyleBundle("~/Content/treestyle").Include("~/Content/Scripts/themes/default/style.css"));
+            bundles.Add(new StyleBundle("~/Content/treestyle").Include("~/Scripts/themes/default/style.css"));
 
         }
     }

@@ -12,9 +12,9 @@ namespace WebSQLMan
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{extnet-root}/{extnet-file}/ext.axd");
+           
 
-
-
+       
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

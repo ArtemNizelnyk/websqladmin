@@ -10,6 +10,7 @@ namespace WebSQLMan.App_Start
    
     public class HomeConfig
     {
+         [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(WebSQLMan.App_Start.HomeConfig), "Start")]
         
 
         public static void RegisterRoutes(RouteCollection routes)
