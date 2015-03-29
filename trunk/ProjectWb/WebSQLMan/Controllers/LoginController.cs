@@ -7,18 +7,22 @@ namespace WebSQLMan.Controllers
 {
     public class LoginController : Controller
     {
+        //
+        // GET: /Home/
 
         public ActionResult Index()
         {
-            ViewBag.servers = SQL.Func.GetActualSQLServers();
 
             return View();
         }
-
-        public RedirectToRouteResult Dissconnect()
+        [HttpPost]
+        public RedirectToRouteResult Connect(ConnectionParams cnParams)
         {
-            return RedirectToAction("Index", "Login");
+           
+            SqlConnection cn = SQL.Func.ConnectToSQLserver(cnParams.ServerName);
+            return RedirectToAction("Index", "Main", cnParams);
         }
 
+        
     }
 }

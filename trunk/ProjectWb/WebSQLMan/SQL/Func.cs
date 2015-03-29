@@ -11,88 +11,26 @@ namespace WebSQLMan.SQL
 {
     public class Func
     {
-        public static List<string> GetActualSQLServers()
-        {
-            SqlDataSourceEnumerator instance = SqlDataSourceEnumerator.Instance;
-            System.Data.DataTable table = instance.GetDataSources();
-            List<string> servers = new List<string>();
-            foreach (System.Data.DataRow row in table.Rows)
-            {
-                servers.Add((string)row[0]);
-            }
-            return servers;
-        }
-
-         [OutputCache(Duration = 50, Location = OutputCacheLocation.Server)]
+        
         public static SqlConnection ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
         {
             SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
             connection.DataSource = Server;
             connection.IntegratedSecurity = IntegratedSecurity;
             String strConn = connection.ToString();
-            //create connection
-            SqlConnection sqlConn = new SqlConnection(strConn);
-            //open connection
-            sqlConn.Open();
+            SqlConnection sqlConn;
+            using(
+             sqlConn = new SqlConnection(strConn)){
+            sqlConn.Open();}
             return sqlConn;
         }
 
-        public static List<string> GetDatabasesOnServer(string ServerName)
-        {
-            List<String> databases = new List<String>();
-            SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
-            connection.DataSource = ServerName;
-            //connection.UserID = //get username;
-            // connection.Password = //get password;
-            connection.IntegratedSecurity = true;
-            String strConn = connection.ToString();
-            //create connection
-            SqlConnection sqlConn = new SqlConnection(strConn);
-            //open connection
-            sqlConn.Open();
-            //get databases
-            DataTable tblDatabases = sqlConn.GetSchema("Databases");
-            //close connection
-            sqlConn.Close();
-            //add to list
-            foreach (DataRow row in tblDatabases.Rows)
-            {
-                String strDatabaseName = row["database_name"].ToString();
-
-                databases.Add(strDatabaseName);
-            }
-
-            return databases;
-        }
-
-        public static List<string> GetTablesOnDataBase(SqlConnection cn, string DataBase)
-        {
-            List<string> Tables = new List<string>();
-
-            string queryString = String.Format("Use {0} SELECT Name FROM dbo.sysobjects WHERE (xtype = 'U');", DataBase);
-            SqlCommand command = new SqlCommand(
-                queryString, cn);
-
-            SqlDataReader reader = command.ExecuteReader();
-            try
-            {
-                while (reader.Read())
-                {
-                    Tables.Add((string)reader[0]);
-                }
-            }
-            finally
-            {
-                // Always call Close when done reading.
-                reader.Close();
-            }
-            return Tables;
-        }
+             
 
         public static DataSet RunQuery(SqlCommand sqlQuery, string server)
         {
             DataSet resultsDataSet = new DataSet();
-            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog=master;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False",server)))//type here your own sqlConnection
+            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog=master;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server)))
             {
 
                 string query = sqlQuery.CommandText;
@@ -109,7 +47,7 @@ namespace WebSQLMan.SQL
                 sqlQuery.Connection = sqlConnection;
 
                 //заполняем DataSet
-                    dbAdapter.Fill(resultsDataSet);
+                dbAdapter.Fill(resultsDataSet);
             }
 
             return resultsDataSet;
@@ -118,29 +56,30 @@ namespace WebSQLMan.SQL
         public static DataSet RunQuery(SqlCommand sqlQuery, string server, string DB)
         {
             DataSet resultsDataSet = new DataSet();
-            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog={1};Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server, DB)))//type here your own sqlConnection
+            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog={1};Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server, DB)))
             {
 
                 string query = sqlQuery.CommandText;
                 //Build a command that will execute your SQL
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
-                try{
-                //Open your connection prior to executing the Command
-                sqlConnection.Open();
+                try
+                {
+                    //Open your connection prior to executing the Command
+                    sqlConnection.Open();
 
 
-                SqlDataAdapter dbAdapter = new SqlDataAdapter();
-                dbAdapter.SelectCommand = sqlQuery;
-                sqlQuery.Connection = sqlConnection;
+                    SqlDataAdapter dbAdapter = new SqlDataAdapter();
+                    dbAdapter.SelectCommand = sqlQuery;
+                    sqlQuery.Connection = sqlConnection;
 
-                //заполняем DataSet
-                
+                    //заполняем DataSet
+
                     dbAdapter.Fill(resultsDataSet);
                 }
-                catch(SqlException)
+                catch (SqlException)
                 {
-                    
+
                 }
             }
 
@@ -157,7 +96,7 @@ namespace WebSQLMan.SQL
             SqlCommand sqlQuery = new SqlCommand(sql);
 
 
-            resultSet = RunQuery(sqlQuery,server, DB);
+            resultSet = RunQuery(sqlQuery, server, DB);
 
 
 
@@ -178,17 +117,22 @@ namespace WebSQLMan.SQL
             //create connection
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
-                //open connection
-                sqlConn.Open();
-                //get databases
-                SqlCommand Command = sqlConn.CreateCommand();
-                Command.CommandText = "SELECT * FROM sys.databases Where Name IN ('master','model','msdb','tempdb') OR Is_distributor = 1;";
-                SqlDataReader Reader = Command.ExecuteReader();
-                while (Reader.Read())
-                {
-                    databases.Add((string)Reader["Name"]);
+                try
+                {  //open connection
+                    sqlConn.Open();
+                    //get databases
+                    SqlCommand Command = sqlConn.CreateCommand();
+                    Command.CommandText = "SELECT * FROM sys.databases Where Name IN ('master','model','msdb','tempdb') OR Is_distributor = 1;";
+                    SqlDataReader Reader = Command.ExecuteReader();
+                    while (Reader.Read())
+                    {
+                        databases.Add((string)Reader["Name"]);
+                    }
                 }
+                catch (SqlException)
+                {
 
+                }
                 return databases;
             }
         }
@@ -205,17 +149,22 @@ namespace WebSQLMan.SQL
             //create connection
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
-                //open connection
-                sqlConn.Open();
-                //get databases
-                SqlCommand Command = sqlConn.CreateCommand();
-                Command.CommandText = "SELECT * FROM sys.databases Where Name NOT IN ('master','model','msdb','tempdb') AND Is_distributor <> 1;";
-                SqlDataReader Reader = Command.ExecuteReader();
-                while (Reader.Read())
-                {
-                    databases.Add((string)Reader["Name"]);
+                try
+                {//open connection
+                    sqlConn.Open();
+                    //get databases
+                    SqlCommand Command = sqlConn.CreateCommand();
+                    Command.CommandText = "SELECT * FROM sys.databases Where Name NOT IN ('master','model','msdb','tempdb') AND Is_distributor <> 1;";
+                    SqlDataReader Reader = Command.ExecuteReader();
+                    while (Reader.Read())
+                    {
+                        databases.Add((string)Reader["Name"]);
+                    }
                 }
+                catch (SqlException)
+                {
 
+                }
                 return databases;
             }
         }
@@ -232,15 +181,22 @@ namespace WebSQLMan.SQL
             //create connection
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
-                //open connection
-                sqlConn.Open();
-                //get databases
-                SqlCommand Command = sqlConn.CreateCommand();
-                Command.CommandText = "SELECT * FROM sys.databases Where Name Like '%Snapshot%';";
-                SqlDataReader Reader = Command.ExecuteReader();
-                while (Reader.Read())
+                try
                 {
-                    databases.Add((string)Reader["Name"]);
+                    //open connection
+                    sqlConn.Open();
+                    //get databases
+                    SqlCommand Command = sqlConn.CreateCommand();
+                    Command.CommandText = "SELECT * FROM sys.databases Where Name Like '%Snapshot%';";
+                    SqlDataReader Reader = Command.ExecuteReader();
+                    while (Reader.Read())
+                    {
+                        databases.Add((string)Reader["Name"]);
+                    }
+                }
+                catch(SqlException)
+                {
+
                 }
 
                 return databases;

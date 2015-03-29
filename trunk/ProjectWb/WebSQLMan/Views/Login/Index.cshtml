@@ -1,36 +1,46 @@
 ﻿@model WebSQLMan.Models.ConnectionParams
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+   var  X = Html.X();
 }
 
-<div>
-    @using (Html.BeginForm("Index", "Home"))
-    {
-        <p>
-            @Html.LabelFor(x => x.ServerName)
-            @Html.TextBoxFor(x => x.ServerName)
 
-        </p>
-        <p>
-            @Html.LabelFor(x => x.DataBase)
-            @Html.TextBoxFor(x => x.DataBase)
 
-        </p>
-        <p>
-            Authentication
-            @Html.DropDownListFor(x => x.Authentication, new[]{
-            new SelectListItem(){Text = "SQL Server Authentication", Value="SqlAuthentication"},
-            new SelectListItem(){Text = "Windows Authentication", Value="WindowsAuthentication"}})
-        </p>
-        <p>
-            @Html.LabelFor(x => x.Login)
-            @Html.TextBoxFor(x => x.Login)
-        </p>
-        <p>
-            @Html.LabelFor(x => x.Password)
-            @Html.TextBoxFor(x => x.Password)
-        </p>
-        <input type="submit" value="Connect" />
-    }
-</div>
+@(X.ResourceManager())
+@(
+ X.Window()
+                .Title("Login")
+                .Width(400)
+                .Height(250)
+                .Layout(LayoutType.Fit)
+                .Closable(false)
+                .Border(false)
+                .Draggable(false)
+                .Items(
+                    Html.X().FormPanel()
+                        .ID("LoginForm")
+                        .Frame(true)
+                        .DefaultAnchor("100%")
+                        .BodyPadding(6)
+                        .FieldDefaults(def =>
+                        {
+                            def.MsgTarget = MessageTarget.Side;
+                        })
+                        .Items(
+                            Html.X().TextFieldFor(m => m.ServerName),
+                            Html.X().TextFieldFor(m => m.DataBase),
+                            Html.X().ComboBoxFor(m => m.Authentification),
+                            Html.X().TextFieldFor(m => m.Login),
+                            Html.X().TextFieldFor(m => m.Password)
+                        )
+                )
+            .Buttons(
+                    Html.X().Button().Text("Connect").DirectEvents(de => {
+                                de.Click.Url = Url.Action("Connect");
+                                de.Click.EventMask.ShowMask = true;
+                                de.Click.FormID = "LoginForm";
+                            })
+            )
+)
