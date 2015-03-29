@@ -20,9 +20,9 @@ namespace WebSQLMan.App_Start
 
     // настраиваем маршрут для контроллера
     routes.MapRoute(
-        "Home", // Имя маршрута
+        "Main", // Имя маршрута
         "{controller}/{action}/{id}", // Как будет выглядеть URL
-        new { controller = "Home", action = "Index", id = UrlParameter.Optional } //Что вызывать по умолчанию
+        new { controller = "Main", action = "Index", id = UrlParameter.Optional } //Что вызывать по умолчанию
     );
 }
         public static void Start()

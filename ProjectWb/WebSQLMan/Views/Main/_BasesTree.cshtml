@@ -1,0 +1,70 @@
+﻿@using System.Data
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $('#demo1').jstree({
+            'core': {
+                "themes": {
+                    "dots": true,
+                    "icons": true
+                },
+                "check_callback": true,
+                'data': {
+                    'url': function (node) {
+                        return node.id === '#' ?
+                          'Main/GetRootNodes' :
+                          'Main/GetChildren';
+                    },
+                    'data': function (node) {
+                        return {
+                            'id': node.id,
+                            'NodeData': node.data,
+                            'NodeText': node.text
+
+                        };
+                    }
+                }
+            },
+            "plugins": ["contextmenu", "themes", "ui"],
+            "contextmenu": {
+                "items": function ($node) {
+                    return {
+                        "Select": {
+                            "label": "Select First 100",
+                            "action": function (node) {
+                                this.Select(node);
+                            }
+                        },
+                        "SelectMore": {
+                            "label": "Select First 1000",
+                            "action": function (node) {
+                                this.SelectMore(node);
+                            }
+                        }
+                    };
+                }
+            }
+        })
+            .bind("Select.jstree", function (node, data) {
+                $.ajax({
+                    url: "@Url.Action("ContextMenu", "Main")",
+                    type: 'POST',
+                    data: {
+
+                        'NodeText': node.text
+
+                    },
+                    success: function (result) {
+                    }
+                });
+            });
+    })
+</script>
+
+
+<div id="demo1" style="height: 400px; overflow-y: scroll;">
+
+</div>

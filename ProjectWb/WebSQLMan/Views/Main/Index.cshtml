@@ -1,5 +1,6 @@
 ﻿@using WebSQLMan.SQL;
 
+
 @{
 
     ViewBag.Title = "WebSqlAdministrator";
@@ -25,7 +26,7 @@
                             .ToolTip("New Connection")
                             .DirectEvents(de =>
                                     {
-                                        de.Click.Url = Url.Action("Dissconnect", "Login");
+                                        de.Click.Url = Url.Action("Dissconnect", "Main");
                                     }),
 
                     X.Button()
@@ -34,7 +35,7 @@
                             .ToolTip("Reconnect")
                             .DirectEvents(de =>
                                     {
-                                        de.Click.Url = Url.Action("Dissconnect", "Login");
+                                        de.Click.Url = Url.Action("Dissconnect", "Main");
                                     }),
 
                     X.Button()
@@ -65,7 +66,7 @@
                     .ToolTip("Disconnect")
                     .DirectEvents(de =>
                             {
-                                de.Click.Url = Url.Action("Dissconnect", "Login");
+                                de.Click.Url = Url.Action("Dissconnect", "Main");
                                 de.Click.Confirmation.ConfirmRequest = true;
                                 de.Click.Confirmation.Title = "Выход";
                                 de.Click.Confirmation.Message = "Вы уверены, что хотите выйти? Все измененные данные будут утеряны!";
@@ -79,6 +80,7 @@
                 .Width(225)
                 .MinWidth(225)
                 .MaxWidth(400)
+                .AutoScroll(true)
                 .Split(true)
                 .Collapsible(true)
                 .Items(
@@ -95,6 +97,7 @@
                         .Border(true)
                         .BodyPadding(6)
                         .Icon(Icon.Database)
+                        .MaxHeight(400)
                         .Layout(LayoutType.Fit)
                         .Loader(
                         Html.X().ComponentLoader()
@@ -136,15 +139,9 @@
                     .Region(Region.Center)
                     .BodyPadding(10)
                     .Header(false)
+                    .AutoScroll(true)
 
-                        ,
 
-                    X.Panel()
-                        .Title("2Tab")
-                        .Closable(false)
-                        .Border(false)
-                        .BodyPadding(6)
-                        .Html("new Tab for result query")
     ),
 
     X.Panel() //create right panel with 2 tabs for error or succces messages
@@ -175,7 +172,7 @@
                                     .Icon(Icon.Lightning)
                                     .FormBind(true)
                                     .MaxHeight(30)
-                                    .MaxWidth(50)
+                                    .MaxWidth(100)
                                     .DirectEvents(de =>
                                                         {
                                                             de.Click.Url = Url.Action("Run");
@@ -198,78 +195,3 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html>

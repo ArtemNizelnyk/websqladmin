@@ -9,10 +9,16 @@ namespace WebSQLMan.Models
         [Required]
         public string DataBase { get; set; }
         [Required]
-        public string Authentication { get; set; }
+        public  Auth Authentification{ get; set; }
         [Required]
         public string Login { get; set; }
         [Required]
         public string Password { get; set; }
+
+        public enum Auth
+        {
+            SqlAuthentication,
+            WindowsAuthentication
+        }
     }
 }
