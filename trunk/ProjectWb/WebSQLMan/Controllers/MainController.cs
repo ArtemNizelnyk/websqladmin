@@ -56,14 +56,33 @@ namespace WebSQLMan.Controllers
         }
 
         [HttpPost]
-        public RedirectToRouteResult ContextMenu(string NodeText)
+        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText)
         {
+            DataTable dt = new DataTable();
             string conid = "CenterResult";
             string querystring = string.Format("Select Top(100) * From {0}", NodeText);
+            ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
+            string server = cnP.ServerName;
+            string db = cnP.DataBase;
+           
+            DataSet ds = SQL.Func.Input(querystring, server, db);
 
-            return RedirectToAction("Run", "Home", new { containerId = conid, query = querystring });
+            if (ds.Tables.Count > 0)
+            {
+                dt = ds.Tables[0];
+            }
 
+            return new Ext.Net.MVC.PartialViewResult
+            {
+                ViewName = "Run",
+                ContainerId = "CenterResult",
+                Model = dt, //passing the DataTable as my Model
+                ClearContainer = true,
+                RenderMode = RenderMode.AddTo
+
+            };
         }
+        
 
 
 

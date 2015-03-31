@@ -19,18 +19,15 @@ namespace WebSQLMan.SQL
             connection.IntegratedSecurity = IntegratedSecurity;
             String strConn = connection.ToString();
             SqlConnection sqlConn;
-            try
-            {
+            
+            
                 using (
                  sqlConn = new SqlConnection(strConn))
                 {
                     sqlConn.Open();
                 }
-            }
-            catch   (SqlException)
-            {
-
-            }
+            
+            
             
         }
 
