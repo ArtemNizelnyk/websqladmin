@@ -12,17 +12,26 @@ namespace WebSQLMan.SQL
     public class Func
     {
         
-        public static SqlConnection ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
+        public static void ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
         {
             SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
             connection.DataSource = Server;
             connection.IntegratedSecurity = IntegratedSecurity;
             String strConn = connection.ToString();
             SqlConnection sqlConn;
-            using(
-             sqlConn = new SqlConnection(strConn)){
-            sqlConn.Open();}
-            return sqlConn;
+            try
+            {
+                using (
+                 sqlConn = new SqlConnection(strConn))
+                {
+                    sqlConn.Open();
+                }
+            }
+            catch   (SqlException)
+            {
+
+            }
+            
         }
 
              

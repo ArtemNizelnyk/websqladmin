@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
-   var  X = Html.X();
+    var X = Html.X();
 }
 
 
@@ -24,6 +24,7 @@
                         .Frame(true)
                         .DefaultAnchor("100%")
                         .BodyPadding(6)
+                        .Listeners(l => l.ValidityChange.Handler = "#{ConBut}.setDisabled(!valid);")
                         .FieldDefaults(def =>
                         {
                             def.MsgTarget = MessageTarget.Side;
@@ -37,10 +38,21 @@
                         )
                 )
             .Buttons(
-                    Html.X().Button().Text("Connect").DirectEvents(de => {
-                                de.Click.Url = Url.Action("Connect");
-                                de.Click.EventMask.ShowMask = true;
-                                de.Click.FormID = "LoginForm";
-                            })
+                    Html.X().Button().ID("ConBut").Text("Connect").Disabled(true).DirectEvents(de =>
+                    {
+                        de.Click.Url = Url.Action("Connect");
+                        de.Click.Before = @"if (!#{LoginForm}.getForm().isValid()) { return false; }
+                            Ext.Msg.wait('Conecting to the database...', 'Connecting');";
+                        de.Click.FormID = "LoginForm";
+                        de.Click.Failure = @"Ext.Msg.show({ 
+                                title   : 'Error', 
+                                msg     : 'Error during connection', 
+                                minWidth: 200, 
+                                modal   : true, 
+                                icon    : Ext.Msg.ERROR, 
+                                buttons : Ext.Msg.OK 
+                            });";
+                        
+                    })
             )
 )
