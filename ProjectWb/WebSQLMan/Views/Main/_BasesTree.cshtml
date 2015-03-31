@@ -32,35 +32,30 @@
             "contextmenu": {
                 "items": function ($node) {
                     return {
-                        "Select": {
+                        "create": {
                             "label": "Select First 100",
                             "action": function (node) {
-                                this.Select(node);
+                                $.ajax({
+                                    url: "/Main/ContextMenu",
+                                    type: "POST",
+                                    data: {
+                                        'NodeText': $node.text
+                                    },
+                                    datatype: "string"
+                                });
                             }
                         },
                         "SelectMore": {
                             "label": "Select First 1000",
-                            "action": function (node) {
-                                this.SelectMore(node);
+                            "action": function (obj) {
+                                this.SelectMore(obj);
                             }
                         }
                     };
                 }
             }
         })
-            .bind("Select.jstree", function (node, data) {
-                $.ajax({
-                    url: "@Url.Action("ContextMenu", "Main")",
-                    type: 'POST',
-                    data: {
-
-                        'NodeText': node.text
-
-                    },
-                    success: function (result) {
-                    }
-                });
-            });
+            
     })
 </script>
 
