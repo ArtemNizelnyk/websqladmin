@@ -2,6 +2,8 @@
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using WebSQLMan.Models;
+using Ext.Net.MVC;
+using Ext.Net;
 
 namespace WebSQLMan.Controllers
 {
@@ -16,13 +18,20 @@ namespace WebSQLMan.Controllers
             return View();
         }
         [HttpPost]
-        public RedirectToRouteResult Connect(ConnectionParams cnParams)
+        public ActionResult Connect(ConnectionParams cnParams)
         {
-           
-            SqlConnection cn = SQL.Func.ConnectToSQLserver(cnParams.ServerName);
+
+
+
+            SQL.Func.ConnectToSQLserver(cnParams.ServerName);
             return RedirectToAction("Index", "Main", cnParams);
+
+
+
+
+
         }
 
-        
+
     }
 }
