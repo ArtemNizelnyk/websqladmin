@@ -35,8 +35,8 @@ namespace WebSQLMan.Controllers
             DataTable dt = new DataTable();
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
-            string db = cnP.DataBase;
-            DataSet ds = SQL.Func.Input(query, server, db);
+            string db = (string)HttpContext.Cache["CurDB"];
+            DataSet ds = SQL.Func.Input(query, server, db, cnP.Login, cnP.Password);
 
             if (ds.Tables.Count > 0)
             {
@@ -63,8 +63,8 @@ namespace WebSQLMan.Controllers
             string querystring = string.Format("Select Top(100) * From {0}", NodeText);
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
-            string db = cnP.DataBase;
-           
+            string db = NodeText;
+
             DataSet ds = SQL.Func.Input(querystring, server, db);
 
             if (ds.Tables.Count > 0)
@@ -75,14 +75,14 @@ namespace WebSQLMan.Controllers
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "Run",
-                ContainerId = "CenterResult",
+                ContainerId = conid,
                 Model = dt, //passing the DataTable as my Model
                 ClearContainer = true,
                 RenderMode = RenderMode.AddTo
 
             };
         }
-        
+
 
 
 
@@ -114,11 +114,13 @@ namespace WebSQLMan.Controllers
 
             string Server = CnP.ServerName;
 
-            SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
-            cnBuilder.DataSource = Server;
-            cnBuilder.InitialCatalog = CnP.DataBase;
-            cnBuilder.IntegratedSecurity = true;
-            using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))  // Захардкодил!!  В дальнейшем достать конекшн из КЄША
+            HttpContext.Cache["CurDB"] = ParseDB(NodeData);
+
+            //SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
+            //cnBuilder.DataSource = Server;
+
+            //cnBuilder.IntegratedSecurity = true;
+            //using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))
             {
                 //CurrConn.Open();
                 List<G_JSTree> Nodes = new List<G_JSTree>();
@@ -326,6 +328,8 @@ namespace WebSQLMan.Controllers
 
         string GetFirstWord(string str)
         {
+            if (str == null)
+                return "";
             if (str.IndexOf(" ") < 0)
                 return str;
             return str.Substring(0, str.IndexOf(" "));
@@ -333,16 +337,25 @@ namespace WebSQLMan.Controllers
 
         string ParseDB(string str)
         {
+            if (str == null)
+                return "";
             int i = str.IndexOf("(DB)");
             int j = str.IndexOf("(-DB)");
 
+            if (i == -1 || j == -1)
+                return "";
             return str.Substring(i + 4, j - i - 4);
         }
 
         string ParseTbl(string str)
         {
+            if (str == null)
+                return "";
             int i = str.IndexOf("(Tbl)");
             int j = str.IndexOf("(-Tbl)");
+
+            if (i == -1 || j == -1)
+                return "";
 
             return str.Substring(i + 5, j - i - 5);
         }

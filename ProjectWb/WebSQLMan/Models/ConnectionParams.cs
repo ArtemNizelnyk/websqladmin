@@ -6,8 +6,6 @@ namespace WebSQLMan.Models
     {
         [Required(ErrorMessage = "Укажите имя сервера")]
         public string ServerName { get; set; }
-        [Required(ErrorMessage = "Укажите базу данных")]
-        public string DataBase { get; set; }
         [Required(ErrorMessage = "Выберите способ аутентификации")]
         public Auth Authentification { get; set; }
         public string Login { get; set; }

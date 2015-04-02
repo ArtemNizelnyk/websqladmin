@@ -41,7 +41,11 @@
                                     data: {
                                         'NodeText': $node.text
                                     },
-                                    datatype: "string"
+                                    datatype: "string",
+                                    success: function (data) {
+
+                                        alert(data);
+                                    }
                                 });
                             }
                         },
@@ -54,8 +58,7 @@
                     };
                 }
             }
-        })
-            
+        });
     })
 </script>
 

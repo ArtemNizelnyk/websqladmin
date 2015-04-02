@@ -1,10 +1,21 @@
 ﻿@model WebSQLMan.Models.ConnectionParams
 
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "Home"+ViewBag.Errors;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var X = Html.X();
 }
+
+<style type="text/css">
+    .RedBorder {
+        border: none;
+        background-color: transparent;
+        border-bottom-color: transparent;
+        border-color: transparent;
+        border-top-color: transparent;
+        outline-color: White;
+    }
+</style>
 
 
 
@@ -30,9 +41,11 @@
                             def.MsgTarget = MessageTarget.Side;
                         })
                         .Items(
+                            Html.X().TextField().Text((string)HttpContext.Current.Cache["Errors"])
+                                                .Cls("RedBorder"),
                             Html.X().TextFieldFor(m => m.ServerName),
-                            Html.X().TextFieldFor(m => m.DataBase),
-                            Html.X().ComboBoxFor(m => m.Authentification),
+                                Html.X().ComboBoxFor(m => m.Authentification).Text("WindowsAuthentication")
+                                    .Editable(false),
                             Html.X().TextFieldFor(m => m.Login),
                             Html.X().TextFieldFor(m => m.Password)
                         )
@@ -44,15 +57,15 @@
                         de.Click.Before = @"if (!#{LoginForm}.getForm().isValid()) { return false; }
                             Ext.Msg.wait('Conecting to the database...', 'Connecting');";
                         de.Click.FormID = "LoginForm";
-                        de.Click.Failure = @"Ext.Msg.show({ 
-                                title   : 'Error', 
-                                msg     : 'Error during connection', 
-                                minWidth: 200, 
-                                modal   : true, 
-                                icon    : Ext.Msg.ERROR, 
-                                buttons : Ext.Msg.OK 
+                        de.Click.Failure = @"Ext.Msg.show({
+                                title   : 'Error',
+                                msg     : 'Error during connection',
+                                minWidth: 200,
+                                modal   : true,
+                                icon    : Ext.Msg.ERROR,
+                                buttons : Ext.Msg.OK
                             });";
-                        
+
                     })
             )
 )

@@ -17,13 +17,30 @@ namespace WebSQLMan.Controllers
 
             return View();
         }
+
+        public ActionResult IndexError(ConnectionParams cnP)
+        {
+            return View("~/Views/Login/Index.cshtml", cnP);
+        }
+
         [HttpPost]
         public ActionResult Connect(ConnectionParams cnParams)
         {
 
 
-
-            SQL.Func.ConnectToSQLserver(cnParams.ServerName);
+            try
+            {
+                SQL.Func.ConnectToSQLserver(cnParams.ServerName, IntegratedSecurity: (cnParams.Authentification == ConnectionParams.Auth.WindowsAuthentication) ? true : false,
+                    login: cnParams.Login, pass: cnParams.Password);
+            }
+            catch (SqlException ex)
+            {
+                string Errors = "";
+                foreach (SqlError sqlError in ex.Errors)
+                    Errors += sqlError.Message + "\n";
+                HttpContext.Cache["Errors"] = Errors;
+                return RedirectToAction("IndexError", "Login", cnParams);
+            }
             return RedirectToAction("Index", "Main", cnParams);
 
 
