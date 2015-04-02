@@ -11,12 +11,15 @@ namespace WebSQLMan.SQL
 {
     public class Func
     {
-        
-        public static void ConnectToSQLserver(string Server, bool IntegratedSecurity = true)
+
+        public static void ConnectToSQLserver(string Server, bool IntegratedSecurity = true, string login = "", string pass = "")
         {
             SqlConnectionStringBuilder connection = new SqlConnectionStringBuilder();
             connection.DataSource = Server;
             connection.IntegratedSecurity = IntegratedSecurity;
+            connection.UserID = login??String.Empty;
+            connection.Password = pass??String.Empty;
+            
             String strConn = connection.ToString();
             SqlConnection sqlConn;
             
@@ -31,12 +34,20 @@ namespace WebSQLMan.SQL
             
         }
 
-             
 
-        public static DataSet RunQuery(SqlCommand sqlQuery, string server)
+
+        public static DataSet RunQuery(SqlCommand sqlQuery, string server, string login, string passWord)
         {
             DataSet resultsDataSet = new DataSet();
-            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog=master;Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server)))
+            SqlConnectionStringBuilder CnStrBuilder = new SqlConnectionStringBuilder();
+            CnStrBuilder.ConnectTimeout = 15;
+            CnStrBuilder.IntegratedSecurity = true;
+            CnStrBuilder.DataSource = server;
+            CnStrBuilder.Encrypt = false;
+            CnStrBuilder.TrustServerCertificate = false;
+            CnStrBuilder.Password = passWord ?? String.Empty;
+            CnStrBuilder.UserID = login ?? String.Empty;
+            using (SqlConnection sqlConnection = new SqlConnection(CnStrBuilder.ConnectionString))
             {
 
                 string query = sqlQuery.CommandText;
@@ -59,10 +70,20 @@ namespace WebSQLMan.SQL
             return resultsDataSet;
         }
 
-        public static DataSet RunQuery(SqlCommand sqlQuery, string server, string DB)
+        public static DataSet RunQuery(SqlCommand sqlQuery, string server, string DB, string login, string passWord)
         {
             DataSet resultsDataSet = new DataSet();
-            using (SqlConnection sqlConnection = new SqlConnection(String.Format("Data Source={0};Initial Catalog={1};Integrated Security=True;Connect Timeout=15;Encrypt=False;TrustServerCertificate=False", server, DB)))
+            SqlConnectionStringBuilder CnStrBuilder = new SqlConnectionStringBuilder();
+            CnStrBuilder.ConnectTimeout = 15;
+            CnStrBuilder.IntegratedSecurity = true;
+            CnStrBuilder.DataSource = server;
+            CnStrBuilder.InitialCatalog = DB;
+            CnStrBuilder.Encrypt = false;
+            CnStrBuilder.TrustServerCertificate = false;
+            CnStrBuilder.Password = passWord ?? String.Empty;
+            CnStrBuilder.UserID = login ?? String.Empty;
+
+            using (SqlConnection sqlConnection = new SqlConnection(CnStrBuilder.ConnectionString))
             {
 
                 string query = sqlQuery.CommandText;
@@ -94,7 +115,7 @@ namespace WebSQLMan.SQL
 
         [WebMethod()]
         [System.Web.Script.Services.ScriptMethod()]
-        public static DataSet Input(string sql, string server, string DB)
+        public static DataSet Input(string sql, string server, string DB, string login = "", string pass = "")
         {
             DataSet resultSet = new DataSet();
 
@@ -102,7 +123,7 @@ namespace WebSQLMan.SQL
             SqlCommand sqlQuery = new SqlCommand(sql);
 
 
-            resultSet = RunQuery(sqlQuery, server, DB);
+            resultSet = RunQuery(sqlQuery, server, DB, login, pass);
 
 
 
