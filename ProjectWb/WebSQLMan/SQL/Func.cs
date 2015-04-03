@@ -90,8 +90,8 @@ namespace WebSQLMan.SQL
                 //Build a command that will execute your SQL
                 SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
-                try
-                {
+              //  try
+                //{
                     //Open your connection prior to executing the Command
                     sqlConnection.Open();
 
@@ -103,11 +103,11 @@ namespace WebSQLMan.SQL
                     //заполняем DataSet
 
                     dbAdapter.Fill(resultsDataSet);
-                }
-                catch (SqlException)
-                {
+                //}
+                //catch (SqlException)
+                //{
 
-                }
+                //}
             }
 
             return resultsDataSet;

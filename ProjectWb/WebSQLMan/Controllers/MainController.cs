@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Script.Services;
 using WebSQLMan.Models;
 using WebSQLMan.SQL;
+using Ext.Net.MVC;
 
 namespace WebSQLMan.Controllers
 {
@@ -17,7 +18,7 @@ namespace WebSQLMan.Controllers
 
         public ActionResult Index(ConnectionParams cnParams)
         {
-            ViewBag.Message = "Type your query here";
+          
 
             HttpContext.Cache["CnInfo"] = cnParams;
 
@@ -45,6 +46,7 @@ namespace WebSQLMan.Controllers
 
             return new Ext.Net.MVC.PartialViewResult
             {
+                
                 ViewName = "Run",
 
                 ContainerId = containerId,
@@ -55,12 +57,33 @@ namespace WebSQLMan.Controllers
             };
         }
 
-        [HttpPost]
-        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText)
+        public ActionResult AddTab(string conid)
+        {
+
+        
+            var result = new Ext.Net.MVC.PartialViewResult
+            {
+                ViewName = "Query",
+                ContainerId = conid,                                
+                RenderMode = RenderMode.AddTo
+            };
+            
+            this.GetCmp<TabPanel>(conid).SetLastTabAsActive();
+
+            
+            return result;
+
+            }
+
+            
+        
+
+       
+        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string containerId)
         {
             DataTable dt = new DataTable();
-            string conid = "CenterResult";
-            string querystring = string.Format("Select Top(100) * From {0}", NodeText);
+
+            string querystring = string.Format("Select * From {0}", NodeText);
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
             string db = NodeText;
@@ -75,10 +98,11 @@ namespace WebSQLMan.Controllers
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "Run",
-                ContainerId = conid,
+                ContainerId = containerId,
+                ClearContainer=true,
                 Model = dt, //passing the DataTable as my Model
-                ClearContainer = true,
-                RenderMode = RenderMode.AddTo
+                RenderMode = RenderMode.AddTo,
+                WrapByScriptTag = false
 
             };
         }

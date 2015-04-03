@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\HomeConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MainController.cs" />
@@ -174,6 +173,7 @@
     <Content Include="Views\Main\Run.cshtml" />
     <Content Include="Views\Main\_BasesTree.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Main\Query.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

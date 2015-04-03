@@ -36,10 +36,12 @@
                             "label": "Select First 100",
                             "action": function (node) {
                                 $.ajax({
-                                    url: "/Main/ContextMenu",
-                                    type: "POST",
+                                    url: "@Url.Action("ContextMenu", "Main")",
+                                    type: "GET",
                                     data: {
-                                        'NodeText': $node.text
+                                        'NodeText': $node.text,
+                                        'containerId' : "CenterResult"
+
                                     },
                                     datatype: "string",
                                     success: function (data) {
@@ -63,6 +65,6 @@
 </script>
 
 
-<div id="demo1" style="height: 400px; overflow-y: scroll;">
+<div id="demo1" >
 
 </div>

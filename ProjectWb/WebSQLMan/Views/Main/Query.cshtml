@@ -1,0 +1,35 @@
+﻿
+
+@(
+ Html.X().Panel()
+    .Title("NewQuery")
+    .Closable(true)
+.ID("con")
+.Layout(LayoutType.Fit)
+.Height(250)
+.MaxHeight(400)
+.Border(false)
+.Items(       
+                    Html.X().Button()
+                   .Text("Submit")
+                   .Icon(Icon.Lightning)
+                   .MaxHeight(30)
+                   .MaxWidth(100)
+                   .DirectEvents(de =>
+                                      {
+                                        de.Click.Url = Url.Action("Run","Main");
+                                        de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
+                                        de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                      }
+                                    ),
+                    Html.X().TextArea()
+                    .Editable(true)
+                    .ID("SQLComm")
+                    .Border(false)
+                    .Value(null))
+
+
+                    )
+
+
+
