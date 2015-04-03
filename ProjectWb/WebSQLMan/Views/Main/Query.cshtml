@@ -1,15 +1,14 @@
-﻿
+﻿@model string
 
 @(
  Html.X().Panel()
-    .Title("NewQuery")
-    .Closable(true)
-.ID("con")
+        //.ID("con")
+.Header(false)
 .Layout(LayoutType.Fit)
 .Height(250)
 .MaxHeight(400)
 .Border(false)
-.Items(       
+.Items(
                     Html.X().Button()
                    .Text("Submit")
                    .Icon(Icon.Lightning)
@@ -17,19 +16,16 @@
                    .MaxWidth(100)
                    .DirectEvents(de =>
                                       {
-                                        de.Click.Url = Url.Action("Run","Main");
-                                        de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                        de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                          de.Click.Url = Url.Action("Run", "Main");
+                                          de.Click.ExtraParams.Add(new Parameter("query", "#{" + @Model + "}.getValue()", ParameterMode.Raw));
+                                          de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
                                       }
                                     ),
                     Html.X().TextArea()
                     .Editable(true)
-                    .ID("SQLComm")
+                    .ID(@Model)
                     .Border(false)
                     .Value(null))
 
 
-                    )
-
-
-
+)

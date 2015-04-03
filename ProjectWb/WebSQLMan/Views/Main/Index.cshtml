@@ -55,8 +55,8 @@
                     .ToolTip("New query")
                      .DirectEvents(de =>
                                           {
-                       de.Click.Url = @Url.Action("AddTab");
-                de.Click.ExtraParams.Add(new { conid = "SQLcommandTab"});
+                                              de.Click.Url = @Url.Action("AddTab");
+                                              de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}.getValue()", ParameterMode.Raw));
                                           }),
 
                     X.ToolbarFill(),
@@ -105,7 +105,13 @@
                     .Region(Region.Center)
                     .BodyPadding(10)
                     .Header(false)
+                    .AutoScroll(true),
+
+                    X.Panel()
+                    .Title("Messages")
+                    .Header(false)
                     .AutoScroll(true)
+                    .BodyPadding(10)
 
 
     ),
@@ -122,7 +128,6 @@
     .Frame(true)
     .BodyPadding(6)
     .Layout(LayoutType.Fit)
-    .ActiveTabIndex(0)
     .TabPosition(TabPosition.Top)
     .Border(false)
             .TabBar(
@@ -131,10 +136,11 @@
             .Flat(true)
                     .DirectEvents(de =>
                     {
-                        de.Click.Url="/AddTab";
-                        de.Click.ExtraParams.Add(new { containerId = "SQLcommandTab" });
+                        de.Click.Url = "/Main/AddTab";
+                        de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}.getValue()", ParameterMode.Raw));
                     })
-            )    
+                ),
+                @X.Hidden().ID("HiddenNumber").Text("1")
 )
 )
 
