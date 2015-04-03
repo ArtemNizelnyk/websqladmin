@@ -1,11 +1,15 @@
 ﻿@using WebSQLMan.SQL;
 
-
 @{
 
     ViewBag.Title = "WebSqlAdministrator";
     var X = Html.X();
 }
+
+
+
+
+
 
 <link type="text/css" rel="stylesheet" href="http://speed.ext.net/www/intro/css/main.css" />
 
@@ -23,16 +27,8 @@
                     X.Button()
                     .ID("ConnectBtn")
                     .Icon(Icon.DatabaseConnect)
+                    .Width(50)
                             .ToolTip("New Connection")
-                            .DirectEvents(de =>
-                                    {
-                                        de.Click.Url = Url.Action("Dissconnect", "Main");
-                                    }),
-
-                    X.Button()
-                    .ID("RefreshBtn")
-                    .Icon(Icon.DatabaseRefresh)
-                            .ToolTip("Reconnect")
                             .DirectEvents(de =>
                                     {
                                         de.Click.Url = Url.Action("Dissconnect", "Main");
@@ -42,6 +38,7 @@
                     .ID("RunBtn")
                     .Icon(Icon.ScriptStart)
                     .ToolTip("Run query")
+                    .Width(50)
                     .DirectEvents(de =>
                                                           {
                                                               de.Click.Url = Url.Action("Run");
@@ -54,7 +51,13 @@
                     X.Button()
                     .ID("CreateNewBtn")
                     .Icon(Icon.New)
-                    .ToolTip("New query"),
+                    .Width(50)
+                    .ToolTip("New query")
+                     .DirectEvents(de =>
+                                          {
+                       de.Click.Url = @Url.Action("AddTab");
+                de.Click.ExtraParams.Add(new { conid = "SQLcommandTab"});
+                                          }),
 
                     X.ToolbarFill(),
 
@@ -64,6 +67,7 @@
                     .ID("ExitBtn")
                     .Icon(Icon.Disconnect)
                     .ToolTip("Disconnect")
+                    .Width(50)
                     .DirectEvents(de =>
                             {
                                 de.Click.Url = Url.Action("Dissconnect", "Main");
@@ -76,38 +80,21 @@
             X.Panel() //create Object browser
                 .Title("Object Explorer")
                 .Region(Region.West)
-                .Layout(LayoutType.Accordion)
-                .Width(225)
-                .MinWidth(225)
-                .MaxWidth(400)
-                .AutoScroll(true)
                 .Split(true)
+                .AutoScroll(true)
+                .Icon(Icon.Database)
                 .Collapsible(true)
-                .Items(
-                    X.Panel()
-                        .Title("Connection")
-                        .Border(false)
-                        .BodyPadding(6)
-                        .Icon(Icon.DatabaseConnect)
-                        .Html("Some Connections Here"),
-
-                     X.Panel()
+                .Width(250)
+                .Items(X.Container()
                         .ID("TreePanel")
-                        .Title("Databases")
                         .Border(true)
-                        .BodyPadding(6)
-                        .Icon(Icon.Database)
-                        .MaxHeight(400)
                         .Layout(LayoutType.Fit)
                         .Loader(
                         Html.X().ComponentLoader()
                         .Url(Url.Action("BasesTree"))
                         .Mode(LoadMode.Script)
                                 .Params(new { containerId = "TreePanel" })
-                          )
-
-
-                     ),
+                          )),
 
             X.TabPanel() // create main view panel using grid
                 .Region(Region.Center)
@@ -123,54 +110,32 @@
 
     ),
 
-    X.Panel() //create right panel with 2 tabs for error or succces messages
-    .Title("MessageBox")
-    .Region(Region.East)
-    .Collapsible(true)
-    .Split(true)
-    .MinWidth(225)
-    .Width(225)
-    .Layout(LayoutType.Fit)
-    .Html("Now it's just panel, but will be somth like messagebox with error_messages or success")
-
-    ,
-
-    X.Panel() //down panel for queries
-    .Title("new query")
+    X.TabPanel() //down panel for queries
     .ID("SQLcommandTab")
     .Region(Region.South)
+    .AutoScroll(true)
     .Split(true)
     .Collapsible(true)
-    .Height(150)
+    .Height(250)
+    .MaxHeight(350)
+    .Header(false)
+    .Frame(true)
     .BodyPadding(6)
     .Layout(LayoutType.Fit)
-
-                   .Items(
-                    Html.X().Button()
-                                    .Text("Submit")
-                                    .Icon(Icon.Lightning)
-                                    .FormBind(true)
-                                    .MaxHeight(30)
-                                    .MaxWidth(100)
-                                    .DirectEvents(de =>
-                                                        {
-                                                            de.Click.Url = Url.Action("Run");
-                                                            de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                            de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
-
-                                                        }
-
-                                    )
-
-                                            ,
-                    X.TextArea()
-                    .Editable(true)
-                    .ID("SQLComm")
-                    .Value(@ViewBag.Message)
-                    .Width(400)
-                                            )
-    )
+    .ActiveTabIndex(0)
+    .TabPosition(TabPosition.Top)
+    .Border(false)
+            .TabBar(
+            X.Button()
+            .Icon(Icon.Add)
+            .Flat(true)
+                    .DirectEvents(de =>
+                    {
+                        de.Click.Url="/AddTab";
+                        de.Click.ExtraParams.Add(new { containerId = "SQLcommandTab" });
+                    })
+            )    
 )
-
+)
 
 
