@@ -8,6 +8,7 @@ using System.Web.Script.Services;
 using WebSQLMan.Models;
 using WebSQLMan.SQL;
 using Ext.Net.MVC;
+using System;
 
 namespace WebSQLMan.Controllers
 {
@@ -18,7 +19,7 @@ namespace WebSQLMan.Controllers
 
         public ActionResult Index(ConnectionParams cnParams)
         {
-          
+
 
             HttpContext.Cache["CnInfo"] = cnParams;
 
@@ -46,7 +47,7 @@ namespace WebSQLMan.Controllers
 
             return new Ext.Net.MVC.PartialViewResult
             {
-                
+
                 ViewName = "Run",
 
                 ContainerId = containerId,
@@ -57,28 +58,71 @@ namespace WebSQLMan.Controllers
             };
         }
 
-        public ActionResult AddTab(string conid)
+        public ActionResult AddTab(int index)
         {
 
-        
-            var result = new Ext.Net.MVC.PartialViewResult
+            index++;
+            this.GetCmp<Hidden>("HiddenNumber").Text = index.ToString();
+            HttpContext.Cache["CurTab"] = index.ToString();
+
+            Panel pan = new Panel
             {
-                ViewName = "Query",
-                ContainerId = conid,                                
-                RenderMode = RenderMode.AddTo
+                ID = "pan" + index,
+                Title = "NewQuery" + index,
+                Closable = true,
+                Height = 250,
+                MaxHeight = 400,
+                Border = false,
+                Items =
+                {
+                    new Container
+                    {
+                        ID="query"+ index,
+                    Loader = new ComponentLoader
+                    {
+                        Url = Url.Action("Query", "Main"),
+                        Mode = LoadMode.Script
+
+                    }
+                    }
+                }
+
             };
-            
-            this.GetCmp<TabPanel>(conid).SetLastTabAsActive();
 
-            
-            return result;
+            pan.AddTo(this.GetCmp<TabPanel>("SQLcommandTab"));
 
-            }
+            /* var result = new Ext.Net.MVC.PartialViewResult
+             {
+                 ViewName="Query",
+                 ContainerId = "query" + index,
+                 RenderMode = RenderMode.AddTo
+             };
+            */
+            this.GetCmp<TabPanel>("SQLcommandTab").SetActiveTab("pan" + index);
 
-            
-        
 
-       
+            //  return result;
+            return this.Direct();
+        }
+
+        public Ext.Net.MVC.PartialViewResult Query()
+        {
+
+            var ind = HttpContext.Cache["CurTab"].ToString();
+
+            return new Ext.Net.MVC.PartialViewResult
+             {
+                 ViewName = "Query",
+                 Model = "textAreaId" + ind,
+                 ContainerId = "query" + ind,
+                 WrapByScriptTag = false,
+                 RenderMode = RenderMode.Replace
+             };
+        }
+
+
+
+
         public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string containerId)
         {
             DataTable dt = new DataTable();
@@ -99,7 +143,7 @@ namespace WebSQLMan.Controllers
             {
                 ViewName = "Run",
                 ContainerId = containerId,
-                ClearContainer=true,
+                ClearContainer = true,
                 Model = dt, //passing the DataTable as my Model
                 RenderMode = RenderMode.AddTo,
                 WrapByScriptTag = false

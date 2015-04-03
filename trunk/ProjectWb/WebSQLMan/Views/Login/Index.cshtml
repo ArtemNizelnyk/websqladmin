@@ -1,7 +1,7 @@
 ﻿@model WebSQLMan.Models.ConnectionParams
 
 @{
-    ViewBag.Title = "Home"+ViewBag.Errors;
+    ViewBag.Title = "Home" + ViewBag.Errors;
     Layout = "~/Views/Shared/_Layout.cshtml";
     var X = Html.X();
 }
@@ -41,13 +41,13 @@
                             def.MsgTarget = MessageTarget.Side;
                         })
                         .Items(
-                            Html.X().TextField().Text((string)HttpContext.Current.Cache["Errors"])
-                                                .Cls("RedBorder"),
                             Html.X().TextFieldFor(m => m.ServerName),
                                 Html.X().ComboBoxFor(m => m.Authentification).Text("WindowsAuthentication")
                                     .Editable(false),
                             Html.X().TextFieldFor(m => m.Login),
-                            Html.X().TextFieldFor(m => m.Password)
+                            Html.X().TextFieldFor(m => m.Password),
+                            Html.X().TextArea().Text((string)HttpContext.Current.Cache["Errors"])
+                                                .Cls("RedBorder").AutoScroll(true)
                         )
                 )
             .Buttons(
