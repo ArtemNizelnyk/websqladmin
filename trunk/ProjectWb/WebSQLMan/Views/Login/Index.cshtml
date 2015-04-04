@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Home" + ViewBag.Errors;
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
     var X = Html.X();
 }
 
@@ -42,12 +42,13 @@
                         })
                         .Items(
                             Html.X().TextFieldFor(m => m.ServerName),
-                                Html.X().ComboBoxFor(m => m.Authentification).Text("WindowsAuthentication")
-                                    .Editable(false),
-                            Html.X().TextFieldFor(m => m.Login),
-                            Html.X().TextFieldFor(m => m.Password),
+                                Html.X().ComboBoxFor(m => m.Authentification).Text("WindowsAuthentication").ID("Auth")
+                                                                 .Editable(false).Listeners(l => l.Change.Handler = "#{Log}.setDisabled( this.getValue() == 1 );"+
+                                                                                                                    "#{Pass}.setDisabled( this.getValue() == 1 );"),
+                            Html.X().TextFieldFor(m => m.Login).ID("Log").Disabled(true),
+                            Html.X().TextFieldFor(m => m.Password).ID("Pass").Disabled(true),
                             Html.X().TextArea().Text((string)HttpContext.Current.Cache["Errors"])
-                                                .Cls("RedBorder").AutoScroll(true)
+                                                .Cls("RedBorder").AutoScroll(true).Editable(false)
                         )
                 )
             .Buttons(

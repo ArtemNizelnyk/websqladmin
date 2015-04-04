@@ -320,5 +320,96 @@ namespace WebSQLMan.SQL
             }
         }
 
+        public static List<string> GetStoredProcs(string Server, string DB)
+        {
+            SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
+            con.IntegratedSecurity = true;
+            con.DataSource = Server;
+            con.InitialCatalog = DB;
+            using (SqlConnection cn = new SqlConnection(con.ConnectionString))
+            {
+                cn.Open();
+                List<string> StoredProcs = new List<string>();
+                SqlCommand Command = cn.CreateCommand();
+                Command.CommandText = String.Format("SELECT name "+
+                                                    "FROM dbo.sysobjects "+
+                                                    "WHERE (type = 'P')" );
+                SqlDataReader Reader = Command.ExecuteReader();
+                while (Reader.Read())
+                {
+                    StoredProcs.Add((string)Reader[0]);
+                }
+                return StoredProcs;
+            }
+        }
+
+        public static List<string> GetFuncs(string Server, string DB)
+        {
+            SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
+            con.IntegratedSecurity = true;
+            con.DataSource = Server;
+            con.InitialCatalog = DB;
+            using (SqlConnection cn = new SqlConnection(con.ConnectionString))
+            {
+                cn.Open();
+                List<string> Funcs = new List<string>();
+                SqlCommand Command = cn.CreateCommand();
+                Command.CommandText = String.Format("SELECT *"+
+                                                    "FROM sys.objects "+
+                                                    "WHERE type IN ('FN', 'IF', 'TF')");
+                SqlDataReader Reader = Command.ExecuteReader();
+                while (Reader.Read())
+                {
+                    Funcs.Add((string)Reader[0]);
+                }
+                return Funcs;
+            }
+        }
+
+        public static List<string> GetTrigs(string Server, string DB)
+        {
+            SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
+            con.IntegratedSecurity = true;
+            con.DataSource = Server;
+            con.InitialCatalog = DB;
+            using (SqlConnection cn = new SqlConnection(con.ConnectionString))
+            {
+                cn.Open();
+                List<string> Trigs = new List<string>();
+                SqlCommand Command = cn.CreateCommand();
+                Command.CommandText = String.Format("SELECT *" +
+                                                    "FROM sys.objects " +
+                                                    "WHERE type = 'TR'");
+                SqlDataReader Reader = Command.ExecuteReader();
+                while (Reader.Read())
+                {
+                    Trigs.Add((string)Reader[0]);
+                }
+                return Trigs;
+            }
+        }
+
+        public static List<string> GetRules(string Server, string DB)
+        {
+            SqlConnectionStringBuilder con = new SqlConnectionStringBuilder();
+            con.IntegratedSecurity = true;
+            con.DataSource = Server;
+            con.InitialCatalog = DB;
+            using (SqlConnection cn = new SqlConnection(con.ConnectionString))
+            {
+                cn.Open();
+                List<string> Trigs = new List<string>();
+                SqlCommand Command = cn.CreateCommand();
+                Command.CommandText = String.Format("SELECT *" +
+                                                    "FROM sys.objects " +
+                                                    "WHERE type = 'TR'");
+                SqlDataReader Reader = Command.ExecuteReader();
+                while (Reader.Read())
+                {
+                    Trigs.Add((string)Reader[0]);
+                }
+                return Trigs;
+            }
+        }
     }
 }
