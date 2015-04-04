@@ -1,10 +1,20 @@
-﻿@model System.Data.DataTable
+﻿@model System.Data.DataSet
 @using System.Data;
 
 <div>
+@foreach (DataTable dt in Model.Tables)
+{
+    
+
     @(
- Html.X().GridPanelFor(Model)
-                .Title(Model.TableName)
+    
+    Html.X().Panel()
+    .Title(dt.TableName)
+    .Closable(true)
+    .Items(
+ Html.X().GridPanelFor(dt)
+                .Title(dt.TableName)
+                .MaxHeight(400)
                 .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.StretchMax })
                 .ForceFit(true)
                     .BottomBar(
@@ -14,6 +24,8 @@
                         .EmptyMsg("No records to display")
                 )
 
+         )
     )
+}   
 </div>
 

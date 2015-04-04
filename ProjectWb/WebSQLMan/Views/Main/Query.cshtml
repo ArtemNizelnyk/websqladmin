@@ -18,7 +18,7 @@
                                       {
                                           de.Click.Url = Url.Action("Run", "Main");
                                           de.Click.ExtraParams.Add(new Parameter("query", "#{" + @Model + "}.getValue()", ParameterMode.Raw));
-                                          de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                          de.Click.ExtraParams.Add(new { containerId = "ResultTabPanel" });
                                       }
                                     ),
                     Html.X().TextArea()
