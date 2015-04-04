@@ -34,28 +34,25 @@ namespace WebSQLMan.Controllers
 
         public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
         {
-            DataTable dt = new DataTable();
+            //DataTable dt = new DataTable();
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
             string db = (string)HttpContext.Cache["CurDB"];
             DataSet ds = SQL.Func.Input(query, server, db, cnP.Login, cnP.Password);
 
-            if (ds.Tables.Count > 0)
-            {
-                dt = ds.Tables[0];
-            }
+
 
             return new Ext.Net.MVC.PartialViewResult
-            {
+{
 
-                ViewName = "Run",
+    ViewName = "Run",
 
-                ContainerId = containerId,
-                Model = dt, //passing the DataTable as my Model
-                ClearContainer = true,
-                RenderMode = RenderMode.AddTo
+    ContainerId = containerId,
+    Model = ds, //passing the DataTable as my Model
+    RenderMode = RenderMode.AddTo
 
-            };
+};
+
         }
 
         public ActionResult AddTab(int index)
@@ -91,11 +88,10 @@ namespace WebSQLMan.Controllers
 
             pan.AddTo(this.GetCmp<TabPanel>("SQLcommandTab"));
 
-            
+
             this.GetCmp<TabPanel>("SQLcommandTab").SetActiveTab("pan" + index);
 
 
-            //  return result;
             return this.Direct();
         }
 
@@ -340,7 +336,7 @@ namespace WebSQLMan.Controllers
                         Node.state = "closed";
                         //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
                         Nodes.Add(Node);
-                        
+
                         #endregion
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
                     case "StoredProcs":
