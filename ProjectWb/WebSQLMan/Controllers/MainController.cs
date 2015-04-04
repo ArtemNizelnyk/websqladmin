@@ -160,7 +160,7 @@ namespace WebSQLMan.Controllers
         [HttpGet]
         public JsonResult CashDB(string NodeData)
         {
-            HttpContext.Cache["CurDB"] = ParseDB(NodeData);
+            HttpContext.Cache["CurDB"] = NodeData;
             return new JsonResult();
         }
 
