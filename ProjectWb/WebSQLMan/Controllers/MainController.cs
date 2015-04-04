@@ -91,13 +91,7 @@ namespace WebSQLMan.Controllers
 
             pan.AddTo(this.GetCmp<TabPanel>("SQLcommandTab"));
 
-            /* var result = new Ext.Net.MVC.PartialViewResult
-             {
-                 ViewName="Query",
-                 ContainerId = "query" + index,
-                 RenderMode = RenderMode.AddTo
-             };
-            */
+            
             this.GetCmp<TabPanel>("SQLcommandTab").SetActiveTab("pan" + index);
 
 
@@ -184,11 +178,6 @@ namespace WebSQLMan.Controllers
 
             HttpContext.Cache["CurDB"] = ParseDB(NodeData);
 
-            //SqlConnectionStringBuilder cnBuilder = new SqlConnectionStringBuilder();
-            //cnBuilder.DataSource = Server;
-
-            //cnBuilder.IntegratedSecurity = true;
-            //using (SqlConnection CurrConn = new SqlConnection(cnBuilder.ConnectionString))
             {
                 //CurrConn.Open();
                 List<G_JSTree> Nodes = new List<G_JSTree>();
@@ -238,6 +227,7 @@ namespace WebSQLMan.Controllers
                 switch (GetFirstWord(NodeData))
                 {
                     case "DB":
+                        HttpContext.Cache["CurDB"] = NodeText;
                         #region DBnodeCONTENT
                         Node = new G_JSTree();
                         Node.children = true;
@@ -316,6 +306,81 @@ namespace WebSQLMan.Controllers
                             Node.data = "View " + NodeData;
 
                             Node.text = view;
+                            Node.state = "closed";
+                            Nodes.Add(Node);
+                        }
+                        return Json(Nodes, JsonRequestBehavior.AllowGet);
+                    case "Programmability":
+                        string db = ParseDB(NodeData);
+                        #region ProgrammabilityNodeCONTENT
+                        Node = new G_JSTree();
+                        Node.children = true;
+                        Node.data = "StoredProcs " + "(DB)" + db + "(-DB)";
+                        Node.text = "Stored Procedures";
+                        Node.state = "closed";
+                        Nodes.Add(Node);
+                        Node = new G_JSTree();
+                        Node.children = true;
+                        Node.data = "Functions " + "(DB)" + db + "(-DB)";
+                        Node.text = "Functions";
+                        Node.state = "closed";
+
+                        Nodes.Add(Node);
+                        Node = new G_JSTree();
+                        Node.children = true;
+                        Node.data = "Triggers " + "(DB)" + db + "(-DB)";
+                        Node.text = "Database Triggers";
+                        Node.state = "closed";
+                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+                        Nodes.Add(Node);
+                        Node = new G_JSTree();
+                        Node.children = true;
+                        Node.data = "Rules " + "(DB)" + db + "(-DB)";
+                        Node.text = "Rules";
+                        Node.state = "closed";
+                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
+                        Nodes.Add(Node);
+                        
+                        #endregion
+                        return Json(Nodes, JsonRequestBehavior.AllowGet);
+                    case "StoredProcs":
+                        db = ParseDB(NodeData);
+                        List<string> procs = Func.GetStoredProcs(Server, db);
+                        foreach (string proc in procs)
+                        {
+                            Node = new G_JSTree();
+                            Node.children = false;
+                            Node.data = "Proc " + NodeData;
+
+                            Node.text = proc;
+                            Node.state = "closed";
+                            Nodes.Add(Node);
+                        }
+                        return Json(Nodes, JsonRequestBehavior.AllowGet);
+                    case "Functions":
+                        db = ParseDB(NodeData);
+                        List<string> funcs = Func.GetFuncs(Server, db);
+                        foreach (string func in funcs)
+                        {
+                            Node = new G_JSTree();
+                            Node.children = false;
+                            Node.data = "Func " + NodeData;
+
+                            Node.text = func;
+                            Node.state = "closed";
+                            Nodes.Add(Node);
+                        }
+                        return Json(Nodes, JsonRequestBehavior.AllowGet);
+                    case "Triggers":
+                        db = ParseDB(NodeData);
+                        List<string> trigs = Func.GetTrigs(Server, db);
+                        foreach (string trig in trigs)
+                        {
+                            Node = new G_JSTree();
+                            Node.children = false;
+                            Node.data = "Func " + NodeData;
+
+                            Node.text = trig;
                             Node.state = "closed";
                             Nodes.Add(Node);
                         }

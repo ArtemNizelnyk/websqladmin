@@ -18,11 +18,6 @@ namespace WebSQLMan.Controllers
             return View();
         }
 
-        public ActionResult IndexError(ConnectionParams cnP)
-        {
-            return View("~/Views/Login/Index.cshtml", cnP);
-        }
-
         [HttpPost]
         public ActionResult Connect(ConnectionParams cnParams)
         {
@@ -39,7 +34,7 @@ namespace WebSQLMan.Controllers
                 foreach (SqlError sqlError in ex.Errors)
                     Errors += sqlError.Message + "\n";
                 HttpContext.Cache["Errors"] = Errors;
-                return RedirectToAction("IndexError", "Login", cnParams);
+                return RedirectToAction("Index", "Login", cnParams);
             }
             return RedirectToAction("Index", "Main", cnParams);
 
