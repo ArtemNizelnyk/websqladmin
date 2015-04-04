@@ -64,11 +64,12 @@
 
         $('#demo1').bind(
         "select_node.jstree", function (evt, data) {
+            
             $.ajax({
                 url: "@Url.Action("CashDB", "Main")",
                 type: "GET",
             data: {
-                'NodeData': ""
+                'NodeData': data.node.text
             },
             datatype: "string",
             success: function (data) {
