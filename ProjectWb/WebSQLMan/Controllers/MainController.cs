@@ -157,6 +157,13 @@ namespace WebSQLMan.Controllers
             };
         }
 
+        [HttpGet]
+        public JsonResult CashDB(string NodeData)
+        {
+            HttpContext.Cache["CurDB"] = ParseDB(NodeData);
+            return new JsonResult();
+        }
+
         public string GetRootNodes()
         {
             return "<ul> <li class=\"jstree-closed\">System Databases</li>" +
@@ -171,8 +178,6 @@ namespace WebSQLMan.Controllers
             ConnectionParams CnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
 
             string Server = CnP.ServerName;
-
-            HttpContext.Cache["CurDB"] = ParseDB(NodeData);
 
             {
                 //CurrConn.Open();
@@ -223,7 +228,7 @@ namespace WebSQLMan.Controllers
                 switch (GetFirstWord(NodeData))
                 {
                     case "DB":
-                        HttpContext.Cache["CurDB"] = NodeText;
+                        
                         #region DBnodeCONTENT
                         Node = new G_JSTree();
                         Node.children = true;
