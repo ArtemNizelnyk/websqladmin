@@ -61,6 +61,23 @@
                 }
             }
         });
+
+        $('#demo1').bind(
+        "select_node.jstree", function (evt, data) {
+            $.ajax({
+                url: "@Url.Action("CashDB", "Main")",
+                type: "GET",
+            data: {
+                'NodeData': ""
+            },
+            datatype: "string",
+            success: function (data) {
+
+            }
+        });
+        }
+);
+
     })
 </script>
 
