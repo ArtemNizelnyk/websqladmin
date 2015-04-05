@@ -35,20 +35,10 @@
                         "create": {
                             "label": "Select First 100",
                             "action": function (node) {
-                                $.ajax({
-                                    url: "@Url.Action("ContextMenu", "Main")",
-                                    type: "Post",
-                                    data: {
-                                        'NodeText': $node.text,
-                                        'NodeData': $node.data,
-                                        'containerId' : "ResultTabPanel"
 
-                                    },
-                                    datatype: "string",
-                                    success: function (data) {
-                                        $.globalEval(data);
-                                    }
-                                });
+                                $("#btnLaunch").val($node.text);
+                                $("#btnLaunch2").val($node.data);
+                                document.getElementById("Spec").click();
                             }
                         },
                         "SelectMore": {
@@ -64,25 +54,43 @@
 
         $('#demo1').bind(
         "select_node.jstree", function (evt, data) {
-            
+
             $.ajax({
                 url: "@Url.Action("CashDB", "Main")",
                 type: "POST",
-            data: {
-                'NodeData': data.node.text
-            },
-            datatype: "string",
-            success: function (data) {
+                data: {
+                    'NodeData': data.node.text
+                },
+                datatype: "string",
+                success: function (data) {
 
-            }
-        });
+                }
+            });
         }
 );
 
     })
 </script>
 
-
 <div id="demo1" >
 
 </div>
+
+<input type="submit" id="btnLaunch" value="master" name="btnLaunch" style="visibility:hidden"/>
+<input type="submit" id="btnLaunch2" value="master2" name="btnLaunch2" style="visibility:hidden" />
+
+@(
+    Html.X().Button()
+                        .ID("Spec")
+                        .Icon(Icon.New)
+                        .Width(50)
+                        .ToolTip("New query")
+                         .DirectEvents(de =>
+                                              {
+                                                  de.Click.Url = @Url.Action("ContextMenu");
+                                                  de.Click.ExtraParams.Add(new Parameter("NodeText", "Ext.get('btnLaunch').dom.value", ParameterMode.Value));
+                                                  de.Click.ExtraParams.Add(new Parameter("NodeData", "Ext.get('btnLaunch2').dom.value", ParameterMode.Value));
+                                                  de.Click.ExtraParams.Add(new Parameter("containerId", "ResultTabPanel", ParameterMode.Raw));
+                                              }).Hidden(true)
+                                              
+)

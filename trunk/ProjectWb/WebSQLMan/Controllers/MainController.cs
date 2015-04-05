@@ -166,6 +166,9 @@ namespace WebSQLMan.Controllers
         [HttpPost]
         public ActionResult ContextMenu(string NodeText, string NodeData, string containerId)
         {
+            containerId = "ResultTabPanel";
+
+
             DataTable dt = new DataTable();
             
             string querystring = string.Format("Select * From {0}", NodeText);
