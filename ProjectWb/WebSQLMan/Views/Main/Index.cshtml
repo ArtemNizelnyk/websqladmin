@@ -139,7 +139,7 @@
                     .DirectEvents(de =>
                     {
                         de.Click.Url = "/Main/AddTab";
-                        de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}.getValue()", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}", ParameterMode.Raw));
                     })
                 ),
                 @X.Hidden().ID("HiddenNumber").Text("1")
