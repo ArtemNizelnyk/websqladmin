@@ -112,11 +112,11 @@ namespace WebSQLMan.Controllers
 
 
 
-
+        [HttpPost]
         public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string NodeData, string containerId)
         {
             DataTable dt = new DataTable();
-
+            
             string querystring = string.Format("Select * From {0}", NodeText);
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
@@ -132,7 +132,7 @@ namespace WebSQLMan.Controllers
                 Model = ds, //passing the DataTable as my Model
                 RenderMode = RenderMode.AddTo,
                 WrapByScriptTag = false
-
+                
             };
         }
 
