@@ -37,7 +37,7 @@
                             "action": function (node) {
                                 $.ajax({
                                     url: "@Url.Action("ContextMenu", "Main")",
-                                    type: "GET",
+                                    type: "Post",
                                     data: {
                                         'NodeText': $node.text,
                                         'NodeData': $node.data,
@@ -46,7 +46,7 @@
                                     },
                                     datatype: "string",
                                     success: function (data) {
-
+                                        $.globalEval(data);
                                     }
                                 });
                             }
