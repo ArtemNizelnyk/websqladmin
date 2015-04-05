@@ -113,28 +113,23 @@ namespace WebSQLMan.Controllers
 
 
 
-        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string containerId)
+        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string NodeData, string containerId)
         {
             DataTable dt = new DataTable();
 
             string querystring = string.Format("Select * From {0}", NodeText);
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
-            string db = NodeText;
+            string db = ParseDB(NodeData);
 
             DataSet ds = SQL.Func.Input(querystring, server, db);
-
-            if (ds.Tables.Count > 0)
-            {
-                dt = ds.Tables[0];
-            }
 
             return new Ext.Net.MVC.PartialViewResult
             {
                 ViewName = "Run",
                 ContainerId = containerId,
                 ClearContainer = true,
-                Model = dt, //passing the DataTable as my Model
+                Model = ds, //passing the DataTable as my Model
                 RenderMode = RenderMode.AddTo,
                 WrapByScriptTag = false
 

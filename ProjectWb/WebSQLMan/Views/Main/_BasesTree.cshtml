@@ -40,13 +40,13 @@
                                     type: "GET",
                                     data: {
                                         'NodeText': $node.text,
+                                        'NodeData': $node.data,
                                         'containerId' : "CenterResult"
 
                                     },
                                     datatype: "string",
                                     success: function (data) {
 
-                                        alert(data);
                                     }
                                 });
                             }
