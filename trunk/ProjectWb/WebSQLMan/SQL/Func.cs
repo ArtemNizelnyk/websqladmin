@@ -38,40 +38,49 @@ namespace WebSQLMan.SQL
 
         public static DataSet RunQuery(SqlCommand sqlQuery, string server, string login, string passWord)
         {
-            DataSet resultsDataSet = new DataSet();
-            SqlConnectionStringBuilder CnStrBuilder = new SqlConnectionStringBuilder();
-            CnStrBuilder.ConnectTimeout = 15;
-            CnStrBuilder.IntegratedSecurity = true;
-            CnStrBuilder.DataSource = server;
-            CnStrBuilder.Encrypt = false;
-            CnStrBuilder.TrustServerCertificate = false;
-            CnStrBuilder.Password = passWord ?? String.Empty;
-            CnStrBuilder.UserID = login ?? String.Empty;
-            using (SqlConnection sqlConnection = new SqlConnection(CnStrBuilder.ConnectionString))
+            try
             {
+                DataSet resultsDataSet = new DataSet();
+                SqlConnectionStringBuilder CnStrBuilder = new SqlConnectionStringBuilder();
+                CnStrBuilder.ConnectTimeout = 15;
+                CnStrBuilder.IntegratedSecurity = true;
+                CnStrBuilder.DataSource = server;
+                CnStrBuilder.Encrypt = false;
+                CnStrBuilder.TrustServerCertificate = false;
+                CnStrBuilder.Password = passWord ?? String.Empty;
+                CnStrBuilder.UserID = login ?? String.Empty;
+                using (SqlConnection sqlConnection = new SqlConnection(CnStrBuilder.ConnectionString))
+                {
 
-                string query = sqlQuery.CommandText;
-                //Build a command that will execute your SQL
-                SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
+                    string query = sqlQuery.CommandText;
+                    //Build a command that will execute your SQL
+                    SqlCommand sqlCommand = new SqlCommand(query, sqlConnection);
 
 
-                //Open your connection prior to executing the Command
-                sqlConnection.Open();
+                    //Open your connection prior to executing the Command
+                    sqlConnection.Open();
 
 
-                SqlDataAdapter dbAdapter = new SqlDataAdapter();
-                dbAdapter.SelectCommand = sqlQuery;
-                sqlQuery.Connection = sqlConnection;
+                    SqlDataAdapter dbAdapter = new SqlDataAdapter();
+                    dbAdapter.SelectCommand = sqlQuery;
+                    sqlQuery.Connection = sqlConnection;
 
-                //заполняем DataSet
-                dbAdapter.Fill(resultsDataSet);
+                    //заполняем DataSet
+                    dbAdapter.Fill(resultsDataSet);
+                }
+
+                return resultsDataSet;
+            }
+            catch(SqlException ex)
+            {
+                throw ex;
             }
 
-            return resultsDataSet;
-        }
+            }
 
         public static DataSet RunQuery(SqlCommand sqlQuery, string server, string DB, string login, string passWord)
         {
+            try {
             DataSet resultsDataSet = new DataSet();
             SqlConnectionStringBuilder CnStrBuilder = new SqlConnectionStringBuilder();
             CnStrBuilder.ConnectTimeout = 15;
@@ -103,14 +112,16 @@ namespace WebSQLMan.SQL
                     //заполняем DataSet
 
                     dbAdapter.Fill(resultsDataSet);
-                //}
-                //catch (SqlException)
-                //{
+                
 
-                //}
             }
 
             return resultsDataSet;
+        }
+            catch(SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         [WebMethod()]
@@ -122,13 +133,21 @@ namespace WebSQLMan.SQL
 
             SqlCommand sqlQuery = new SqlCommand(sql);
 
+            try
+            {
+                resultSet = RunQuery(sqlQuery, server, DB, login, pass);
 
-            resultSet = RunQuery(sqlQuery, server, DB, login, pass);
 
 
 
-            return resultSet;
-
+                return resultSet;
+            }
+           
+                catch(SqlException ex)
+            {
+                throw ex;
+            }
+            
 
         }
 
@@ -156,9 +175,9 @@ namespace WebSQLMan.SQL
                         databases.Add((string)Reader["Name"]);
                     }
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
-
+                    throw ex;
                 }
                 return databases;
             }
@@ -188,9 +207,9 @@ namespace WebSQLMan.SQL
                         databases.Add((string)Reader["Name"]);
                     }
                 }
-                catch (SqlException)
+                catch (SqlException ex)
                 {
-
+                    throw ex;
                 }
                 return databases;
             }
@@ -221,9 +240,9 @@ namespace WebSQLMan.SQL
                         databases.Add((string)Reader["Name"]);
                     }
                 }
-                catch(SqlException)
+                catch(SqlException ex)
                 {
-
+                    throw ex;
                 }
 
                 return databases;

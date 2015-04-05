@@ -41,7 +41,7 @@
                                     data: {
                                         'NodeText': $node.text,
                                         'NodeData': $node.data,
-                                        'containerId' : "CenterResult"
+                                        'containerId' : "ResultTabPanel"
 
                                     },
                                     datatype: "string",
@@ -67,7 +67,7 @@
             
             $.ajax({
                 url: "@Url.Action("CashDB", "Main")",
-                type: "GET",
+                type: "POST",
             data: {
                 'NodeData': data.node.text
             },

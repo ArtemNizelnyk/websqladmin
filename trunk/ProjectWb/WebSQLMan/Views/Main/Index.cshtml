@@ -43,7 +43,7 @@
                                                           {
                                                               de.Click.Url = Url.Action("Run");
                                                               de.Click.ExtraParams.Add(new Parameter("query", "#{SQLComm}.getValue()", ParameterMode.Raw));
-                                                              de.Click.ExtraParams.Add(new { containerId = "CenterResult" });
+                                                              de.Click.ExtraParams.Add(new { containerId = "ResultTabPanel" });
                                                           }
 
                                             ),
@@ -101,18 +101,19 @@
                 .ID("ResultTabPanel")
                 .Items(
                     X.Panel()
-                    .Title("Result")
-                    .ID("CenterResult")
-                    .Region(Region.Center)
-                    .BodyPadding(10)
-                    .Header(false)
-                    .AutoScroll(true),
-
-                    X.Panel()
                     .Title("Messages")
+                    .ID("MessagePan")
                     .Header(false)
+                    .Layout(LayoutType.Fit)
                     .AutoScroll(true)
                     .BodyPadding(10)
+                    .MessageBusDirectEvents(de =>
+                    {
+                        var e = new MessageBusDirectEvent { Name = "ResponseServer", Action = "ResponseEvent" };
+                        e.ExtraParams.Add(new Parameter("message", "data", ParameterMode.Raw));
+                        de.Add(e);
+                    })
+                       
 
 
     ),
