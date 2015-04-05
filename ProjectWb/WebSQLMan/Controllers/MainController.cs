@@ -9,6 +9,7 @@ using WebSQLMan.Models;
 using WebSQLMan.SQL;
 using Ext.Net.MVC;
 using System;
+using System.Web.UI;
 
 namespace WebSQLMan.Controllers
 {
@@ -16,6 +17,8 @@ namespace WebSQLMan.Controllers
     public class MainController : Controller
     {
         // GET: Home
+
+        
 
         public ActionResult Index(ConnectionParams cnParams)
         {
@@ -32,28 +35,76 @@ namespace WebSQLMan.Controllers
         }
 
 
-        public Ext.Net.MVC.PartialViewResult Run(string query, string containerId)
+        public ActionResult Run(string query, string containerId)
         {
             //DataTable dt = new DataTable();
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
             string db = (string)HttpContext.Cache["CurDB"];
-            DataSet ds = SQL.Func.Input(query, server, db, cnP.Login, cnP.Password);
+            try
+            {
+                DataSet ds = SQL.Func.Input(query, server, db, cnP.Login, cnP.Password);
+                MessageBus.Default.Publish("ResponseServer", "Запрос выполнен успешно");
+                var result = new Ext.Net.MVC.PartialViewResult
+                {
 
+                    ViewName = "Run",
 
+                    ContainerId = containerId,
+                    Model = ds, //passing the DataTable as my Model
+                    RenderMode = RenderMode.AddTo
+                    
 
-            return new Ext.Net.MVC.PartialViewResult
-{
+                };
+            
+            return result;
+            }
+            catch (SqlException ex)
+            {
+                string Errors = "";
+                foreach (SqlError sqlError in ex.Errors)
+                    Errors += sqlError.Message + "\n";
+                
+                MessageBus.Default.Publish("ResponseServer", Errors);
 
-    ViewName = "Run",
-
-    ContainerId = containerId,
-    Model = ds, //passing the DataTable as my Model
-    RenderMode = RenderMode.AddTo
-
-};
-
+                return this.Direct();
+                
+            }
         }
+
+        public ActionResult ResponseEvent (string message)
+		{
+            string succes="Запрос выполнен успешно";
+            if (succes != message)
+            {
+                this.GetCmp<Panel>("MessagePan").Body.CreateChild(new DomObject
+                {
+                    Html =String.Format("{0} : ({1})", message, DateTime.Now.ToLongTimeString()),
+                    Tag = HtmlTextWriterTag.P,
+                    CustomConfig =
+				{
+					new ConfigItem("style", "color:red;", ParameterMode.Value)
+				}
+                });
+            }
+            else
+            {
+                this.GetCmp<Panel>("MessagePan").Body.CreateChild(new DomObject
+                {
+                    Html = String.Format("{0} : ({1})", message, DateTime.Now.ToLongTimeString()),
+                    Tag = HtmlTextWriterTag.P,
+                    CustomConfig =
+				{
+					new ConfigItem("style", "color:green;", ParameterMode.Value)
+				}
+                });
+
+            }
+
+			return this.Direct();
+		}
+
+        
 
         public ActionResult AddTab(int index)
         {
@@ -113,7 +164,7 @@ namespace WebSQLMan.Controllers
 
 
         [HttpPost]
-        public Ext.Net.MVC.PartialViewResult ContextMenu(string NodeText, string NodeData, string containerId)
+        public ActionResult ContextMenu(string NodeText, string NodeData, string containerId)
         {
             DataTable dt = new DataTable();
             
@@ -122,18 +173,37 @@ namespace WebSQLMan.Controllers
             string server = cnP.ServerName;
             string db = ParseDB(NodeData);
 
-            DataSet ds = SQL.Func.Input(querystring, server, db);
-
-            return new Ext.Net.MVC.PartialViewResult
+                       try
             {
-                ViewName = "Run",
-                ContainerId = containerId,
-                ClearContainer = true,
-                Model = ds, //passing the DataTable as my Model
-                RenderMode = RenderMode.AddTo,
-                WrapByScriptTag = false
-                
-            };
+                DataSet ds = SQL.Func.Input(querystring, server, db);
+                MessageBus.Default.Publish("ResponseServer", "Запрос выполнен успешно");
+                var result = new Ext.Net.MVC.PartialViewResult
+                {
+
+                    ViewName = "Run",
+
+                    ContainerId = containerId,
+                    Model = ds, //passing the DataTable as my Model
+                    RenderMode = RenderMode.AddTo
+
+
+                };
+
+                return result;
+            }
+            catch (SqlException ex)
+            {
+                string Errors = "";
+                foreach (SqlError sqlError in ex.Errors)
+                    Errors += sqlError.Message + "\n";
+
+                MessageBus.Default.Publish("ResponseServer", Errors);
+
+                return this.Direct();
+
+            }
+
+           
         }
 
 
@@ -152,7 +222,7 @@ namespace WebSQLMan.Controllers
             };
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult CashDB(string NodeData)
         {
             HttpContext.Cache["CurDB"] = NodeData;

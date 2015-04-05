@@ -1,7 +1,7 @@
 ﻿@model System.Data.DataSet
 @using System.Data;
 
-<div>
+
 @foreach (DataTable dt in Model.Tables)
 {
     
@@ -16,18 +16,12 @@
     .BodyPadding(10)
     .AutoScroll(true)
     .Items( Html.X().GridPanelFor<DataTable>(dt,true,true,true)
-    
                 .Title(dt.TableName)
                 .AutoScroll(true)
                 .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.StretchMax })
-                .ForceFit(false)
-                        .BottomBar(
-                        Html.X().PagingToolbar()
-                            
+                .ForceFit(true)
                     )
-
          )
-    )
+    
 }   
-</div>
 
