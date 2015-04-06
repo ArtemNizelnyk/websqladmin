@@ -164,14 +164,14 @@ namespace WebSQLMan.Controllers
 
 
         [HttpPost]
-        public ActionResult ContextMenu(string NodeText, string NodeData, string containerId)
+        public ActionResult ContextMenuTop100(string NodeText, string NodeData, string containerId)
         {
             containerId = "ResultTabPanel";
 
 
             DataTable dt = new DataTable();
             
-            string querystring = string.Format("Select * From {0}", NodeText);
+            string querystring = string.Format("Select TOP 100 * From {0}", NodeText);
             ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
             string server = cnP.ServerName;
             string db = ParseDB(NodeData);
@@ -210,7 +210,51 @@ namespace WebSQLMan.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult ContextMenuTop1000(string NodeText, string NodeData, string containerId)
+        {
+            containerId = "ResultTabPanel";
 
+
+            DataTable dt = new DataTable();
+
+            string querystring = string.Format("Select TOP 1000 * From {0}", NodeText);
+            ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
+            string server = cnP.ServerName;
+            string db = ParseDB(NodeData);
+
+            try
+            {
+                DataSet ds = SQL.Func.Input(querystring, server, db);
+                MessageBus.Default.Publish("ResponseServer", "Запрос выполнен успешно");
+                var result = new Ext.Net.MVC.PartialViewResult
+                {
+
+                    ViewName = "Run",
+
+                    ContainerId = containerId,
+                    Model = ds, //passing the DataTable as my Model
+                    RenderMode = RenderMode.AddTo
+
+
+                };
+
+                return result;
+            }
+            catch (SqlException ex)
+            {
+                string Errors = "";
+                foreach (SqlError sqlError in ex.Errors)
+                    Errors += sqlError.Message + "\n";
+
+                MessageBus.Default.Publish("ResponseServer", Errors);
+
+                return this.Direct();
+
+            }
+
+
+        }
 
         public Ext.Net.MVC.PartialViewResult BasesTree(string containerId)
         {
