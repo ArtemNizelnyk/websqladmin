@@ -256,6 +256,52 @@ namespace WebSQLMan.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult DropTable(string NodeText, string NodeData, string containerId)
+        {
+            containerId = "ResultTabPanel";
+
+
+            DataTable dt = new DataTable();
+
+            string querystring = string.Format("DROP TABLE {0}", NodeText);
+            ConnectionParams cnP = (ConnectionParams)HttpContext.Cache["CnInfo"];
+            string server = cnP.ServerName;
+            string db = ParseDB(NodeData);
+
+            try
+            {
+                DataSet ds = SQL.Func.Input(querystring, server, db);
+                MessageBus.Default.Publish("ResponseServer", "Запрос выполнен успешно");
+                var result = new Ext.Net.MVC.PartialViewResult
+                {
+
+                    ViewName = "Run",
+
+                    ContainerId = containerId,
+                    Model = ds, //passing the DataTable as my Model
+                    RenderMode = RenderMode.AddTo
+
+
+                };
+
+                return result;
+            }
+            catch (SqlException ex)
+            {
+                string Errors = "";
+                foreach (SqlError sqlError in ex.Errors)
+                    Errors += sqlError.Message + "\n";
+
+                MessageBus.Default.Publish("ResponseServer", Errors);
+
+                return this.Direct();
+
+            }
+
+
+        }
+
         public Ext.Net.MVC.PartialViewResult BasesTree(string containerId)
         {
 
