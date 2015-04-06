@@ -285,7 +285,7 @@ namespace WebSQLMan.Controllers
 
                 };
 
-                return result;
+                return RedirectToAction("Index", "Main", HttpContext.Cache["CnInfo"]);
             }
             catch (SqlException ex)
             {
