@@ -1,4 +1,4 @@
-﻿@using WebSQLMan.SQL;
+ @using WebSQLMan.SQL;
 
 @{
 
@@ -139,7 +139,7 @@
                     .DirectEvents(de =>
                     {
                         de.Click.Url = "/Main/AddTab";
-                        de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}", ParameterMode.Raw));
+                        de.Click.ExtraParams.Add(new Parameter("index", "#{HiddenNumber}.getValue()", ParameterMode.Raw));
                     })
                 ),
                 @X.Hidden().ID("HiddenNumber").Text("1")
