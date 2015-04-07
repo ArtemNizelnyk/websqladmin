@@ -23,7 +23,15 @@
                     .Layout(LayoutType.Auto)
                     .StyleSpec("padding-bottom:0px")
                     .Items(
-
+                        X.Button()
+                        .ID("RefreshBtn")
+                        .Icon(Icon.PageRefresh)
+                        .Width(50)
+                                .ToolTip("Refresh object tree")
+                                .DirectEvents(de =>
+                                        {
+                                            de.Click.Url = Url.Action("Refresh", "Main");
+                                        }),
                     X.Button()
                     .ID("ConnectBtn")
                     .Icon(Icon.DatabaseConnect)

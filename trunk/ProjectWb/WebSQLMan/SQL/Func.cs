@@ -122,6 +122,10 @@ namespace WebSQLMan.SQL
             {
                 throw ex;
             }
+            catch( Exception ex )
+            {
+                throw ex;
+            }
         }
 
         [WebMethod()]
@@ -147,8 +151,11 @@ namespace WebSQLMan.SQL
             {
                 throw ex;
             }
-            
 
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public static List<string> GetSystemDatabases(string ServerName)

@@ -70,6 +70,16 @@ namespace WebSQLMan.Controllers
                 return this.Direct();
                 
             }
+            catch (Exception ex)
+            {
+                string Error;
+                Error = ex.Message;
+
+                MessageBus.Default.Publish("ResponseServer", Error);
+
+                return this.Direct();
+
+            }
         }
 
         public ActionResult ResponseEvent (string message)
@@ -161,7 +171,18 @@ namespace WebSQLMan.Controllers
              };
         }
 
+        public Ext.Net.MVC.PartialViewResult Refresh()
+        {
 
+            return new Ext.Net.MVC.PartialViewResult
+            {
+                ViewName = "_BasesTree",
+                ContainerId = "TreePanel",
+                WrapByScriptTag = false,
+                ClearContainer = true,
+                RenderMode = RenderMode.RenderTo
+            };
+        }
 
         [HttpPost]
         public ActionResult ContextMenuTop100(string NodeText, string NodeData, string containerId)
@@ -324,6 +345,7 @@ namespace WebSQLMan.Controllers
 
         public string GetRootNodes()
         {
+
             return "<ul> <li class=\"jstree-closed\">System Databases</li>" +
                         "<li class=\"jstree-closed\">User Databases</li>" +
                         "<li class=\"jstree-closed\">Database Snapshots</li> " +
@@ -343,9 +365,9 @@ namespace WebSQLMan.Controllers
 
                 G_JSTree Node = new G_JSTree();
 
-                switch (id)
+                switch (NodeText)
                 {
-                    case "j1_1":
+                    case "System Databases":
                         List<string> SystemDBs = Func.GetSystemDatabases(Server);
                         foreach (string SysDB in SystemDBs)
                         {
@@ -357,7 +379,7 @@ namespace WebSQLMan.Controllers
                             Nodes.Add(Node);
                         }
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
-                    case "j1_2":
+                    case "User Databases":
                         List<string> UserDBs = Func.GetUserDatabases(Server);
                         foreach (string UserDB in UserDBs)
                         {
@@ -369,7 +391,7 @@ namespace WebSQLMan.Controllers
                             Nodes.Add(Node);
                         }
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
-                    case "j1_3":
+                    case "Database Snapshots":
                         List<string> DBsnapshots = Func.GetDBsnapshots(Server);
                         foreach (string DBsnapshot in DBsnapshots)
                         {
@@ -403,42 +425,12 @@ namespace WebSQLMan.Controllers
                         Nodes.Add(Node);
                         Node = new G_JSTree();
                         Node.children = true;
-                        Node.data = "Synonyms " + "(DB)" + NodeText + "(-DB)";
-                        Node.text = "Synonyms";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
                         Node.data = "Programmability " + "(DB)" + NodeText + "(-DB)";
                         Node.text = "Programmability";
                         Node.state = "closed";
                         //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
                         Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "Service Broker " + "(DB)" + NodeText + "(-DB)";
-                        ;
-                        Node.text = "Service Broker";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "Storage " + "(DB)" + NodeText + "(-DB)";
-                        ;
-                        Node.text = "Storage";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "Security " + "(DB)" + NodeText + "(-DB)";
-                        ;
-                        Node.text = "Security";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
+                        
                         #endregion
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
                     case "Tables":
@@ -461,7 +453,7 @@ namespace WebSQLMan.Controllers
                         foreach (string view in views)
                         {
                             Node = new G_JSTree();
-                            Node.children = true;
+                            Node.children = false;
                             Node.data = "View " + NodeData;
 
                             Node.text = view;
@@ -559,27 +551,8 @@ namespace WebSQLMan.Controllers
                         Node.state = "closed";
 
                         Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "Keys " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
-                        Node.text = "Keys";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "Indexes " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
-                        Node.text = "Indexes";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
-                        Node = new G_JSTree();
-                        Node.children = true;
-                        Node.data = "statistics " + "(Tbl)" + NodeText + "(-Tbl)" + NodeData;
-                        Node.text = "statistics";
-                        Node.state = "closed";
-                        //Node.attr = new G_JsTreeAttribute(){ id = NodeText, selected=false };
-                        Nodes.Add(Node);
+                        
+                        
                         return Json(Nodes, JsonRequestBehavior.AllowGet);
                     case "Constraints":
                         string Tb = ParseTbl(NodeData);
